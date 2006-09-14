@@ -1,14 +1,17 @@
 version=pmwiki-2.1.18 ordered=1 urlencoded=1
 agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
-author=Schimmi
+author=schimmi
 csum=
 ctime=1158140453
-host=212.202.73.176
+host=138.246.7.82
 name=Site.GalleryPictureDefault
-rev=16
+rev=17
 targets=
-text=!{$Title}%0a%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%25center%25 [[{$GalleryOverview}|Overview]]%0a%0a(:gallerypicture 640 {$GalleryPicture}:)%0a
-time=1158217309
+text=!{$Title}%0a%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%25center%25 [[{$GalleryOverview}|Overview]]%0a%0a(:gallerypicture 640 {$GalleryPicture}:)%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1158239121
+author:1158239121=schimmi
+diff:1158239121:1158217309:=6,7d5%0a%3c %0a%3c %25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+host:1158239121=138.246.7.82
 author:1158217309=Schimmi
 diff:1158217309:1158217281:=1a2,3%0a> !!![[{$GalleryOverview}|Overview]]%0a> %0a3,4c5%0a%3c %25center%25 [[{$GalleryOverview}|Overview]]%0a%3c %0a---%0a> %0a
 host:1158217309=212.202.73.176
