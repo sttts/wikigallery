@@ -277,6 +277,10 @@ class GalleryPageStore extends PageStore {
       $pagefile = $this->pagefile($name);
       if( $pagefile==-1 || !is_dir($WikiGallery_PicturesBasePath . "/" . $pagefile) )
 	return false;
+      if( $pagefile=="" )
+	$pagefileslash = "";
+      else
+	$pagefileslash = "$pagefile/";
 
       // create trail of pictures
       $pictures = getFilenames( $WikiGallery_PicturesBasePath . "/" . $pagefile );
@@ -287,7 +291,7 @@ class GalleryPageStore extends PageStore {
       #$page["text"] .= "\n* [[$link|(:gallerypicture $WikiGallery_OverviewThumbnailWidth " . $this->galleryslash . $pagefile . "/" . $pictures[0] . ":)]]\n";
       #$page["targets"] .= ",$link";
       foreach( $pictures as $k ) {
-	$link = $this->galleryGroup . "." . fileNameToPageName( "$pagefile/$k" );
+	$link = $this->galleryGroup . "." . fileNameToPageName( "$pagefileslash$k" );
 #	$page["text"] .= "* [[$link]]\n";
 	$page["text"] .= "* [[$link]]\n";
 	$page["targets"] .= ",$link";
