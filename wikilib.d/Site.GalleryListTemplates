@@ -1,0 +1,128 @@
+version=pmwiki-2.1.18 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+author=Schimmi
+csum=
+ctime=1158163725
+host=212.202.73.176
+name=Site.GalleryListTemplates
+rev=39
+targets=Site.FullName
+text=[[#galleryoverview]]\%0a[[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]\%0a[[#galleryoverviewend]]%0a%0a[[#gallerynavigation]]\%0a[[{=$FullName}|(:gallerypicture 60 {=$GalleryPicture}:)]]\%0a[[#gallerynavigationend]]%0a%0a[[#galleryalbums]]%0a%25lframe thumb%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a[[#galleryalbumsend]]
+time=1158221824
+author:1158221824=Schimmi
+diff:1158221824:1158221740:=10c10%0a%3c %25lframe thumb%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221824=212.202.73.176
+author:1158221740=Schimmi
+diff:1158221740:1158221730:=10c10%0a%3c %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25frame%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221740=212.202.73.176
+author:1158221730=Schimmi
+diff:1158221730:1158221709:=10c10%0a%3c %25frame%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221730=212.202.73.176
+author:1158221709=Schimmi
+diff:1158221709:1158221696:=10c10%0a%3c %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | %25center%25 [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221709=212.202.73.176
+author:1158221696=Schimmi
+diff:1158221696:1158221685:=10c10%0a%3c %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | %25center%25 [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 %25center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221696=212.202.73.176
+author:1158221685=Schimmi
+diff:1158221685:1158221674:=10c10%0a%3c %25lframe%25 %25center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 %25center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | %25center%25 [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221685=212.202.73.176
+author:1158221674=Schimmi
+diff:1158221674:1158221664:=10c10%0a%3c %25lframe%25 %25center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | %25center%25 [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 %25center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221674=212.202.73.176
+author:1158221664=Schimmi
+diff:1158221664:1158221648:=10c10%0a%3c %25lframe%25 %25center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
+host:1158221664=212.202.73.176
+author:1158221648=Schimmi
+diff:1158221648:1158221556:=9,10c9,10%0a%3c [[#galleryalbums]]%0a%3c %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> [[#galleryalbums]]\%0a> [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]\%0a
+host:1158221648=212.202.73.176
+author:1158221556=Schimmi
+diff:1158221556:1158221538:=10c10%0a%3c [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]\%0a---%0a> [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)"{=$Title}"]] | [[{=$FullName}| [-{=$Title}-]]]\%0a
+host:1158221556=212.202.73.176
+author:1158221538=Schimmi
+diff:1158221538:1158221444:=10c10,13%0a%3c [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)"{=$Title}"]] | [[{=$FullName}| [-{=$Title}-]]]\%0a---%0a> [[DocumentationIndex |%0a> http://www.pmichaud.com/img/misc/gem.jpg"Visit the Documentation Index"]]%0a> | [[DocumentationIndex | [-Rock On-]]]%0a> [[{=$FullName}|(:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}|{=$GalleryAlbum}]]\%0a
+host:1158221538=212.202.73.176
+author:1158221444=Schimmi
+diff:1158221444:1158221401:=10,12d9%0a%3c [[DocumentationIndex |%0a%3c http://www.pmichaud.com/img/misc/gem.jpg"Visit the Documentation Index"]]%0a%3c | [[DocumentationIndex | [-Rock On-]]]%0a
+host:1158221444=212.202.73.176
+author:1158221401=Schimmi
+diff:1158221401:1158221316:=10c10%0a%3c [[{=$FullName}|(:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}|{=$GalleryAlbum}]]\%0a---%0a> [[{=$FullName}|(:gallerypicturerandom 120 {=$GalleryAlbum}:) | {=$GalleryAlbum}]]\%0a
+host:1158221401=212.202.73.176
+author:1158221316=Schimmi
+diff:1158221316:1158221190:=10c10%0a%3c [[{=$FullName}|(:gallerypicturerandom 120 {=$GalleryAlbum}:) | {=$GalleryAlbum}]]\%0a---%0a> [[{=$FullName}|(:gallerypicturerandom 120 {=$GalleryAlbum}:)]]\%0a
+host:1158221316=212.202.73.176
+author:1158221190=Schimmi
+diff:1158221190:1158221019:=10c10%0a%3c [[{=$FullName}|(:gallerypicturerandom 120 {=$GalleryAlbum}:)]]\%0a---%0a> a{=$GalleryAlbum}a b{=$FullName}b [[{=$FullName}|(:gallerypicturerandom 60 {=$GalleryAlbum}:)]]\%0a
+host:1158221190=212.202.73.176
+author:1158221019=Schimmi
+diff:1158221019:1158221005:=10c10%0a%3c a{=$GalleryAlbum}a b{=$FullName}b [[{=$FullName}|(:gallerypicturerandom 60 {=$GalleryAlbum}:)]]\%0a---%0a> a{$=GalleryAlbum}a b{$=FullName}b [[{=$FullName}|(:gallerypicturerandom 60 {$=GalleryAlbum}:)]]\%0a
+host:1158221019=212.202.73.176
+author:1158221005=Schimmi
+diff:1158221005:1158220970:=10c10%0a%3c a{$=GalleryAlbum}a b{$=FullName}b [[{=$FullName}|(:gallerypicturerandom 60 {$=GalleryAlbum}:)]]\%0a---%0a> a{$GalleryAlbum}a b{$FullName}b [[{=$FullName}|(:gallerypicturerandom 60 {$GalleryAlbum}:)]]\%0a
+host:1158221005=212.202.73.176
+author:1158220970=Schimmi
+diff:1158220970:1158220951:=10c10%0a%3c a{$GalleryAlbum}a b{$FullName}b [[{=$FullName}|(:gallerypicturerandom 60 {$GalleryAlbum}:)]]\%0a---%0a> {$GalleryAlbum} [[{=$FullName}|(:gallerypicturerandom 60 {$GalleryAlbum}:)]]\%0a
+host:1158220970=212.202.73.176
+author:1158220951=Schimmi
+diff:1158220951:1158220658:=10c10%0a%3c {$GalleryAlbum} [[{=$FullName}|(:gallerypicturerandom 60 {$GalleryAlbum}:)]]\%0a---%0a> [[{=$FullName}|(:gallerypicturerandom 60 {$GalleryAlbum}:)]]\%0a
+host:1158220951=212.202.73.176
+author:1158220658=Schimmi
+diff:1158220658:1158220510:=10c10%0a%3c [[{=$FullName}|(:gallerypicturerandom 60 {$GalleryAlbum}:)]]\%0a---%0a> [[{=$FullName}|(:gallerypicturerandom 60 {$FullName}:)]]\%0a
+host:1158220658=212.202.73.176
+author:1158220510=Schimmi
+diff:1158220510:1158217103:=7,11c7%0a%3c [[#gallerynavigationend]]%0a%3c %0a%3c [[#galleryalbums]]\%0a%3c [[{=$FullName}|(:gallerypicturerandom 60 {$FullName}:)]]\%0a%3c [[#galleryalbumsend]]%0a\ No newline at end of file%0a---%0a> [[#gallerynavigationend]]%0a\ No newline at end of file%0a
+host:1158220510=212.202.73.176
+author:1158217103=Schimmi
+diff:1158217103:1158217092:=6c6%0a%3c [[{=$FullName}|(:gallerypicture 60 {=$GalleryPicture}:)]]\%0a---%0a> [[{=$FullName}|(:gallerypicture 80 {=$GalleryPicture}:)]]\%0a
+host:1158217103=212.202.73.176
+author:1158217092=Schimmi
+diff:1158217092:1158165568:=3,7c3%0a%3c [[#galleryoverviewend]]%0a%3c %0a%3c [[#gallerynavigation]]\%0a%3c [[{=$FullName}|(:gallerypicture 80 {=$GalleryPicture}:)]]\%0a%3c [[#gallerynavigationend]]%0a\ No newline at end of file%0a---%0a> [[#galleryoverviewend]]%0a\ No newline at end of file%0a
+host:1158217092=212.202.73.176
+author:1158165568=Schimmi
+diff:1158165568:1158165296:=1,2c1,2%0a%3c [[#galleryoverview]]\%0a%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]\%0a---%0a> [[#galleryoverview]] \%0a> [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] \%0a
+host:1158165568=141.84.9.37
+author:1158165296=Schimmi
+diff:1158165296:1158165281:=1c1%0a%3c [[#galleryoverview]] \%0a---%0a> [[#galleryoverview]]%0a
+host:1158165296=141.84.9.37
+author:1158165281=Schimmi
+diff:1158165281:1158165254:=2c2%0a%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] \%0a---%0a> [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a
+host:1158165281=141.84.9.37
+author:1158165254=Schimmi
+diff:1158165254:1158165164:=2c2,3%0a%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a---%0a> >>galleryoverview%3c%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a> >>%3c%3c%0a
+host:1158165254=141.84.9.37
+author:1158165164=Schimmi
+diff:1158165164:1158165152:=2,3c2%0a%3c >>galleryoverview%3c%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a%3c >>%3c%3c%0a---%0a> >>galleryoverview%3c%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] >>%3c%3c%0a
+host:1158165164=141.84.9.37
+author:1158165152=Schimmi
+diff:1158165152:1158165135:=2c2,4%0a%3c >>galleryoverview%3c%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] >>%3c%3c%0a---%0a> >>galleryoverview%3c%3c%0a> [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a> >>%3c%3c%0a
+host:1158165152=141.84.9.37
+author:1158165135=Schimmi
+diff:1158165135:1158165114:=4c4%0a%3c >>%3c%3c%0a---%0a> >>%3c%3c(:if:)%0a
+host:1158165135=141.84.9.37
+author:1158165114=Schimmi
+diff:1158165114:1158165088:=3c3%0a%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a---%0a> * [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a
+host:1158165114=141.84.9.37
+author:1158165088=Schimmi
+diff:1158165088:1158165009:=3c3%0a%3c * [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]%0a---%0a> * a{=$GalleryPicture}a{=$Title}a [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158165088=141.84.9.37
+author:1158165009=Schimmi
+diff:1158165009:1158164682:=3c3%0a%3c * a{=$GalleryPicture}a{=$Title}a [[{=$FullName}|{=$Titlespaced}]]%0a---%0a> * a{=$gallerypicture}a{=$Title}a [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158165009=141.84.9.37
+author:1158164682=Schimmi
+diff:1158164682:1158164589:=3c3%0a%3c * a{=$gallerypicture}a{=$Title}a [[{=$FullName}|{=$Titlespaced}]]%0a---%0a> * a{=$gallerypicture}a{=$LastModified}a{=$VersionNum}a [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158164682=141.84.9.37
+author:1158164589=Schimmi
+diff:1158164589:1158164529:=3c3%0a%3c * a{=$gallerypicture}a{=$LastModified}a{=$VersionNum}a [[{=$FullName}|{=$Titlespaced}]]%0a---%0a> * a{=$gallerypicture}a{=$LastModified}a [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158164589=141.84.9.37
+author:1158164529=Schimmi
+diff:1158164529:1158163830:=3c3%0a%3c * a{=$gallerypicture}a{=$LastModified}a [[{=$FullName}|{=$Titlespaced}]]%0a---%0a> * a{=$gallerypicture}a [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158164529=141.84.9.37
+author:1158163830=Schimmi
+diff:1158163830:1158163802:=3c3%0a%3c * a{=$gallerypicture}a [[{=$FullName}|{=$Titlespaced}]]%0a---%0a> * {=$gallerypicture} [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158163830=141.84.9.37
+author:1158163802=Schimmi
+diff:1158163802:1158163725:=3c3%0a%3c * {=$gallerypicture} [[{=$FullName}|{=$Titlespaced}]]%0a---%0a> * [[{=$FullName}|{=$Titlespaced}]]%0a
+host:1158163802=141.84.9.37
+author:1158163725=Schimmi
+diff:1158163725:1158163725:=1,5d0%0a%3c [[#galleryoverview]]%0a%3c >>galleryoverview%3c%3c%0a%3c * [[{=$FullName}|{=$Titlespaced}]]%0a%3c >>%3c%3c(:if:)%0a%3c [[#galleryoverviewend]]%0a\ No newline at end of file%0a
+host:1158163725=141.84.9.37

@@ -1,0 +1,17 @@
+version=pmwiki-2.1.18 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+author=schimmi
+csum=
+ctime=1158220418
+host=212.202.73.176
+name=Pics.HomePage
+rev=2
+targets=
+text=!Photos%0a%0a(:pagelist trail=Pics.Albums fmt=#galleryalbums:)%0a
+time=1158220535
+author:1158220535=schimmi
+diff:1158220535:1158220418:=3c3%0a%3c (:pagelist trail=Pics.Albums fmt=#galleryalbums:)%0a---%0a> (:pagelist trail=Pics.Albums fmt=#GalleryAlbums:)%0a
+host:1158220535=212.202.73.176
+author:1158220418=schimmi
+diff:1158220418:1158220418:=1,3d0%0a%3c !Photos%0a%3c %0a%3c (:pagelist trail=Pics.Albums fmt=#GalleryAlbums:)%0a
+host:1158220418=212.202.73.176

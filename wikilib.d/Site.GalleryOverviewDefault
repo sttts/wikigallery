@@ -1,0 +1,14 @@
+version=pmwiki-2.1.18 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+author=Schimmi
+csum=
+ctime=1158165865
+host=141.84.9.37
+name=Site.GalleryOverviewDefault
+rev=1
+targets=
+text=!{$Title}%0a(:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a
+time=1158165865
+author:1158165865=Schimmi
+diff:1158165865:1158165865:=1,2d0%0a%3c !{$Title}%0a%3c (:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a
+host:1158165865=141.84.9.37
