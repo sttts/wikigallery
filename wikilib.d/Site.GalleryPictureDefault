@@ -1,14 +1,32 @@
 version=pmwiki-2.1.18 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
 author=schimmi
 csum=
 ctime=1158140453
 host=138.246.7.82
 name=Site.GalleryPictureDefault
-rev=17
-targets=
-text=!{$Title}%0a%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%25center%25 [[{$GalleryOverview}|Overview]]%0a%0a(:gallerypicture 640 {$GalleryPicture}:)%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1158239121
+rev=23
+targets=Site.GalleryPictureDefault
+text=!{$Title}%0a%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%25center%25 [[{$GalleryOverview}|Overview]]%0a%0a%25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1158323114
+author:1158323114=schimmi
+diff:1158323114:1158323056:=5,6c5,6%0a%3c %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%3c %0a---%0a> (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a> %0a
+host:1158323114=138.246.7.82
+author:1158323056=schimmi
+diff:1158323056:1158323005:=9,10c9,10%0a%3c %25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%3c %0a---%0a> [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a> %0a
+host:1158323056=138.246.7.82
+author:1158323005=schimmi
+diff:1158323005:1158322488:=9,10c9,10%0a%3c [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%3c %0a---%0a> [[{$FullName}?gallerysize=0|full]] ]%0a> %0a
+host:1158323005=138.246.7.82
+author:1158322488=schimmi
+diff:1158322488:1158321960:=7c7%0a%3c %25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a---%0a> %25center%25 [ [[{$FullName}?gallerysize=300|400]] - [[{$FullName}?gallerysize=600|600]] -%0a
+host:1158322488=138.246.7.82
+author:1158321960=schimmi
+diff:1158321960:1158321521:=9,10c9,10%0a%3c [[{$FullName}?gallerysize=0|full]] ]%0a%3c %0a---%0a> [[{$FullName}?gallerysize=full|full]] ]%0a> %0a
+host:1158321960=138.246.7.82
+author:1158321521=schimmi
+diff:1158321521:1158239121:=5,10c5,6%0a%3c (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%3c %0a%3c %25center%25 [ [[{$FullName}?gallerysize=300|400]] - [[{$FullName}?gallerysize=600|600]] -%0a%3c [[{$FullName}?gallerysize=800|800]] -%0a%3c [[{$FullName}?gallerysize=full|full]] ]%0a%3c %0a---%0a> (:gallerypicture 640 {$GalleryPicture}:)%0a> %0a
+host:1158321521=138.246.7.82
 author:1158239121=schimmi
 diff:1158239121:1158217309:=6,7d5%0a%3c %0a%3c %25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
 host:1158239121=138.246.7.82

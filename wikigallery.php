@@ -34,8 +34,7 @@ SDV($WikiGallery_AlbumsSortBackwards, TRUE );
 SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
 
 # Image sizes
-SDV($WikiGallery_ImageSizes, array(256,512,640,800,1024) ); // not implemented yet
-
+SDV($WikiGallery_DefaultSize, 640);
 
 ################################################################################
 
@@ -47,6 +46,7 @@ Markup('(:gallerypicturerandom width album:)','><|',"/\\(:gallerypicturerandom\\
 $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] : ""';
 $FmtPV['$GalleryAlbum'] = '$page["galleryalbum"] ? $page["galleryalbum"] : ""';
 $FmtPV['$GalleryOverview'] = '$page["galleryoverview"] ? $page["galleryoverview"] : ""';
+$FmtPV['$GallerySize'] = '$GLOBALS["WikiGallery_Size"]';
 
 # default pages
 $WikiLibDirs[] = new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
@@ -63,6 +63,19 @@ preg_replace( "/\\/$/", '', $WikiGallery_PicturesBasePath);
 # add Site.GalleryListTemplates to the list of fmt=#xyz options for pagelists
 $FPLTemplatePageFmt[] = '{$SiteGroup}.GalleryListTemplates';
 
+# new picture size?
+$WikiGallery_Size = $WikiGallery_DefaultSize;
+if( isset($_COOKIE["gallerysize"]) ) {
+  $WikiGallery_Size = intval($_COOKIE["gallerysize"]);
+}
+if( isset($_GET["gallerysize"]) ) {
+  $WikiGallery_Size = intval($_GET["gallerysize"]);
+  setcookie("gallerysize", $WikiGallery_Size, time()+3600);
+}
+if( $WikiGallery_Size<0 || $WikiGallery_Size>10000 )
+  $WikiGallery_Size = $WikiGallery_DefaultSize;
+
+# filename <-> pagename conversion
 function fileNameToPageName( $filename ) {
   global $WikiGallery_PathDelimiter,$WikiGallery_ImgExts;
   $filename = preg_replace( array('/'.$WikiGallery_ImgExts.'$/i', "/[^a-zA-Z0-9\\/]/", "/\\//"),
