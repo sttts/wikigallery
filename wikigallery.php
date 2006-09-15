@@ -79,10 +79,11 @@ if( $WikiGallery_Size<0 || $WikiGallery_Size>10000 )
 # filename <-> pagename conversion
 function fileNameToPageName( $filename ) {
   global $WikiGallery_PathDelimiter,$WikiGallery_ImgExts;
-  $filename = preg_replace( array('/'.$WikiGallery_ImgExts.'$/i', "/[^a-zA-Z0-9\\/]/", "/\\//"),
+  $pagename = preg_replace( array('/'.$WikiGallery_ImgExts.'$/i', "/[^a-zA-Z0-9\\/]/", "/\\//"),
 			    array('', '', $WikiGallery_PathDelimiter), 
 			    $filename );
-  return $filename;
+  
+  return ucfirst($pagename);
 }
 
 function pageNameToFileName( $basePath, $pageName ) {
@@ -109,7 +110,7 @@ function pageNameToFileName( $basePath, $pageName ) {
   $found = "";
   while( ($file=readdir($pwd))!=false ) {
     $filePageName = fileNameToPageName( $file );
-    if( $lastComponent==$filePageName ) {
+    if( ucfirst($lastComponent)==$filePageName ) {
       //echo "Found $file==$lastComponent<br/>";
       $found = $file;
       break;
