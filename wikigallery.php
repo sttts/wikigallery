@@ -21,15 +21,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
-# Linkfmt like Category links
-SDV($LinkGalleryFmt,"<span class='gallerylink'><a href='\$LinkUrl'>\$LinkText</a></span>");
-
-# Image sizes
-SDV($WikiGallery_OverviewThumbnailWidth, 120);
-SDV($WikiGallery_NavThumbnailWidth, 60);
-SDV($WikiGallery_ImageSizes, array(256,512,640,800,1024) );
-
 # Paths
 SDV($WikiGallery_PicturesBasePath, "pictures/"); // the base path to the galleries
 SDV($WikiGallery_PhpThumb, substr($PubDirUrl,0,strlen($PubDirUrl)-strlen(strrchr($PubDirUrl,"/"))) . "/phpThumb.php"  ); // the phpthumb script url
@@ -41,6 +32,10 @@ SDV($WikiGallery_SortBackwards, FALSE );
 SDV($WikiGallery_AlbumsSortByDate, TRUE ); // otherwise alphabetical
 SDV($WikiGallery_AlbumsSortBackwards, TRUE );
 SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
+
+# Image sizes
+SDV($WikiGallery_ImageSizes, array(256,512,640,800,1024) ); // not implemented yet
+
 
 ################################################################################
 
@@ -375,7 +370,7 @@ class GalleryPageStore extends PageStore {
 
       # add maxcolumns many pictures as thumbnails
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
-      global $WikiGallery_NavThumbnailColumns, $WikiGallery_NavThumbnailWidth;
+      global $WikiGallery_NavThumbnailColumns;
       $i = max($thisIndex - ($WikiGallery_NavThumbnailColumns-1)/2, 0);
       while( $i>=0 && $i<$picturesNum && $i<=$thisIndex + ($WikiGallery_NavThumbnailColumns-1)/2 ) {
 	$page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . fileNameToPageName($pathslash . $indexed[$i]) . "]]\n";
