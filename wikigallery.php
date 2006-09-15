@@ -48,6 +48,10 @@ $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] :
 $FmtPV['$GalleryAlbum'] = '$page["galleryalbum"] ? $page["galleryalbum"] : ""';
 $FmtPV['$GalleryOverview'] = '$page["galleryoverview"] ? $page["galleryoverview"] : ""';
 $FmtPV['$GallerySize'] = '$GLOBALS["WikiGallery_Size"]';
+$FmtPV['$GalleryNext'] = 'neighbourPicture("$name",1)';
+$FmtPV['$GalleryNextNext'] = 'neighbourPicture("$name",2)';
+$FmtPV['$GalleryPrev'] = 'neighbourPicture("$name",-1)';
+$FmtPV['$GalleryPrevPrev'] = 'neighbourPicture("$name",-2)';
 
 # default pages
 $WikiLibDirs[] = new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
@@ -202,6 +206,63 @@ function getFilenames( $path, $albums=false ) {
   }
 }
 
+function neighbourPicture( $name, $delta, $count=-1 ) {
+  global $WikiGallery_PicturesBasePath;
+
+  // is it a file?
+  $pagefile = pageNameToFileName( $WikiGallery_PicturesBasePath, $name );
+  if( $pagefile==-1 || is_dir($WikiGallery_PicturesBasePath . "/" . $pagefile) )
+    return false;
+
+  # split pathes into filename and path
+  $slashfilename = strrchr($pagefile,"/");
+  if( $slashfilename==FALSE ) {
+    $filename = $pagefile;
+    $path = "";
+    $slashpath = "";
+    $pathslash = "";
+  } else {
+    $path = substr($pagefile,0,strlen($pagefile)-strlen($slashfilename));
+    $slashpath = "/" . $path;
+    $pathslash = $path . "/";
+    $filename = substr($slashfilename,1);
+  }
+
+  # find position in the album of the current picture
+  $pictures = getFilenames( $WikiGallery_PicturesBasePath . $slashpath );    
+  $indexed = array();
+  $i = 0;
+  $thisIndex = -1;
+  foreach( $pictures as $k ) {
+    $indexed[$i] = $k;    
+    if( $k==$filename ) {
+      $thisIndex = $i;
+    }
+    $i++;
+  }
+  $picturesNum = $i;
+    
+  # found?
+  if( $thisIndex==-1 ) return false;
+
+  # get $count many neighbours from $thisIndex-$delta  
+  $i = max($thisIndex+$delta, 0);
+  $ret = array();
+  if( $count==-1 ) {
+    if( $i<$picturesNum )
+      return fileNameToPageName($pathslash . $indexed[$i]);
+    else
+      return "";
+  } else {
+    while( $i<$picturesNum && $i<$thisIndex+$delta+$count ) {
+      $ret[] = fileNameToPageName($pathslash . $indexed[$i]);
+      $i++;
+    }
+    
+    return $ret;
+  }
+}
+
 function WikiGalleryPicture( $size, $path, $random=false ) {
   global $WikiGallery_PhpThumb, $WikiGallery_PicturesBasePath;
   $path = securePath( $path );
@@ -261,7 +322,7 @@ class GalleryPageStore extends PageStore {
   }
 
   function read($pagename, $since=0) {
-    global $WikiGallery_PicturesBasePath, $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now;
+    global $WikiGallery_PicturesBasePath, $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now, $WikiGallery_NavThumbnailColumns;
 
     // In gallery group?
     if( PageVar($pagename, '$Group')!=$this->galleryGroup )
@@ -333,53 +394,16 @@ class GalleryPageStore extends PageStore {
     }
 
     // navigation trail index page?
-    if( preg_match( '/^(.*)Navigation$/', $name, $matches ) ) {
-      // is it a file?
+    if( preg_match( '/^(.*)Navigation$/', $name, $matches ) ) { 
       $name = $matches[1];
-      $pagefile = $this->pagefile($name);
-      if( $pagefile==-1 || is_dir($WikiGallery_PicturesBasePath . "/" . $pagefile) )
-	return false;
 
-      # split pathes into filename and path
-      $slashfilename = strrchr($pagefile,"/");
-      if( $slashfilename==FALSE ) {
-	$filename = $pagefile;
-	$path = "";
-	$slashpath = "";
-	$pathslash = "";
-      } else {
-	$path = substr($pagefile,0,strlen($pagefile)-strlen($slashfilename));
-	$slashpath = "/" . $path;
-	$pathslash = $path . "/";
-	$filename = substr($slashfilename,1);
-      }
+      // get neighbour pictures
+      $neighbours = neighbourPicture( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
 
-      # find position in the album of the current picture
-      $pictures = getFilenames( $WikiGallery_PicturesBasePath . $slashpath );    
-      $indexed = array();
-      $i = 0;
-      $thisIndex = -1;
-      foreach( $pictures as $k ) {
-	$indexed[$i] = $k;
-	//echo "$k==$filename ?<br/>";
-	if( $k==$filename ) {
-	  $thisIndex = $i;
-	  //echo "Found $k==$filename<br/>";
-	}
-	$i++;
-      }
-      $picturesNum = $i;
-    
-      # found?
-      if( $thisIndex==-1 ) return false;
-
-      # add maxcolumns many pictures as thumbnails
+      // create trail page
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
-      global $WikiGallery_NavThumbnailColumns;
-      $i = max($thisIndex - ($WikiGallery_NavThumbnailColumns-1)/2, 0);
-      while( $i>=0 && $i<$picturesNum && $i<=$thisIndex + ($WikiGallery_NavThumbnailColumns-1)/2 ) {
-	$page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . fileNameToPageName($pathslash . $indexed[$i]) . "]]\n";
-	$i++;
+      foreach( $neighbours as $pic ) {
+	$page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . $pic . "]]\n";
       }
 
       return $page;

@@ -1,14 +1,26 @@
-version=pmwiki-2.1.18 ordered=1 urlencoded=1
+version=pmwiki-2.1.26 ordered=1 urlencoded=1
 agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
 author=schimmi
 csum=
 ctime=1158140453
 host=138.246.7.82
 name=Site.GalleryPictureDefault
-rev=23
+rev=27
 targets=Site.GalleryPictureDefault
-text=!{$Title}%0a%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%25center%25 [[{$GalleryOverview}|Overview]]%0a%0a%25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1158323114
+text=!{$Title}%0a%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%25center%25 [[{$GalleryOverview}|Overview]]%0a%0a(:if equal "{$GalleryNext}" "":)%0a%25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a(:if ! equal "{$GalleryNext}" "":)%0a%25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:ifend:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1158331032
+author:1158331032=schimmi
+diff:1158331032:1158331019:=5c5%0a%3c (:if equal "{$GalleryNext}" "":)%0a---%0a> (:if equal "{$GalleryNext}" ""}%0a7c7%0a%3c (:if ! equal "{$GalleryNext}" "":)%0a---%0a> (:if ! equal "{$GalleryNext}" ""}%0a
+host:1158331032=138.246.7.82
+author:1158331019=schimmi
+diff:1158331019:1158330987:=6a7%0a> (:ifend:)%0a
+host:1158331019=138.246.7.82
+author:1158330987=schimmi
+diff:1158330987:1158330963:=7c7%0a%3c (:ifend:)%0a---%0a> (:if:)%0a10,11c10,11%0a%3c (:ifend:)%0a%3c %0a---%0a> (:if:)%0a> %0a
+host:1158330987=138.246.7.82
+author:1158330963=schimmi
+diff:1158330963:1158323114:=5d4%0a%3c (:if equal "{$GalleryNext}" ""}%0a7,11c6%0a%3c (:if:)%0a%3c (:if ! equal "{$GalleryNext}" ""}%0a%3c %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a%3c (:if:)%0a%3c %0a---%0a> %0a
+host:1158330963=138.246.7.82
 author:1158323114=schimmi
 diff:1158323114:1158323056:=5,6c5,6%0a%3c %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%3c %0a---%0a> (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a> %0a
 host:1158323114=138.246.7.82
