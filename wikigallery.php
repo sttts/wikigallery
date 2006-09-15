@@ -246,14 +246,16 @@ function neighbourPicture( $name, $delta, $count=-1 ) {
   if( $thisIndex==-1 ) return false;
 
   # get $count many neighbours from $thisIndex-$delta  
-  $i = max($thisIndex+$delta, 0);
-  $ret = array();
   if( $count==-1 ) {
-    if( $i<$picturesNum )
+    $i = $thisIndex+$delta;
+    if( $i>=0 && $i<$picturesNum )
       return fileNameToPageName($pathslash . $indexed[$i]);
     else
       return "";
   } else {
+    $i = max($thisIndex+$delta, 0);
+    $ret = array();
+
     while( $i<$picturesNum && $i<$thisIndex+$delta+$count ) {
       $ret[] = fileNameToPageName($pathslash . $indexed[$i]);
       $i++;
