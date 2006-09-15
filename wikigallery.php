@@ -41,6 +41,7 @@ SDV($WikiGallery_DefaultSize, 640);
 # The markup:
 Markup('(:gallerypicture width picture:)','><|',"/\\(:gallerypicture\\s([0-9]+)\\s([^:]*):\\)/e","WikiGalleryPicture('$1','$2')");
 Markup('(:gallerypicturerandom width album:)','><|',"/\\(:gallerypicturerandom\\s([0-9]+)\\s([^:]*):\\)/e","WikiGalleryPicture('$1','$2',true)");
+#Markup('(:galleryoverviewtitle:)','<inline',"/\\(:galleryoverviewtitle:\\)/e", '$page["galleryoverview"]');
 
 # Page variables
 $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] : ""';
@@ -387,7 +388,8 @@ class GalleryPageStore extends PageStore {
     $pagefile = $this->pagefile($name);
     if( $pagefile!=-1 ) {
       // overview or picture?
-      if( is_dir($WikiGallery_PicturesBasePath . $this->slashgallery . "/" . $pagefile) ) {
+      $filename = $WikiGallery_PicturesBasePath . $this->slashgallery . "/" . $pagefile;
+      if( is_dir($filename) ) {
 	// overview
 	if( PageExists( $this->galleryGroup . ".GalleryPictureTemplate" ) )
 	  $page = ReadPage( $this->galleryGroup . ".GalleryOverviewTemplate" );
@@ -395,6 +397,8 @@ class GalleryPageStore extends PageStore {
 	  $page = ReadPage( "$SiteGroup.GalleryOverviewTemplate" );
 	if( @$page ) {
 	  $page['galleryalbum'] = $this->galleryslash . $pagefile;
+	  $page['ctime'] = filectime( $filename );
+	  $page['time'] = filemtime( $filename );
 	  return $page;
 	}
       } else {
@@ -407,6 +411,8 @@ class GalleryPageStore extends PageStore {
 	  $page['gallerypicture'] = $this->galleryslash . $pagefile;
 	  $album = substr($pagefile, 0, strlen($pagefile)-strlen(strrchr($pagefile,'/')));
 	  $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . fileNameToPageName( $album );
+	  $page['ctime'] = filectime( $filename );
+	  $page['time'] = filemtime( $filename );
 	  return $page;
 	}
       }
