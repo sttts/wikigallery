@@ -1,4 +1,4 @@
-<?
+<?php if (!defined('PmWiki')) exit();
 /*
  * WikiGallery - automatic easy to use gallery extension for PmWiki
  * (c) 2006 Stefan Schimanski <sts@1stein.org>
@@ -65,9 +65,9 @@ $FPLTemplatePageFmt[] = '{$SiteGroup}.GalleryListTemplates';
 
 function fileNameToPageName( $filename ) {
   global $WikiGallery_PathDelimiter,$WikiGallery_ImgExts;
-  $filename = preg_replace( '/'.$WikiGallery_ImgExts.'$/i', '', $filename );
-  $filename = preg_replace( "/[^a-zA-Z0-9\\/]/", '', $filename );
-  $filename = preg_replace( "/\\//", $WikiGallery_PathDelimiter, $filename ); 
+  $filename = preg_replace( array('/'.$WikiGallery_ImgExts.'$/i', "/[^a-zA-Z0-9\\/]/", "/\\//"),
+			    array('', '', $WikiGallery_PathDelimiter), 
+			    $filename );
   return $filename;
 }
 
@@ -232,18 +232,8 @@ class GalleryPageStore extends PageStore {
     // get page name
     $name = PageVar($pagename, '$Name');    
 
-    // trail index page?
-    if( preg_match( '/^(.*)Index$/', $name, $matches ) ) {
-      $name = $matches[1];
-    }
-
-    // albums index page?
-    if( preg_match( '/^(.*)Albums$/', $name, $matches ) ) {
-      $name = $matches[1];
-    }
-
-    // navigation trail page?
-    if( preg_match( '/^(.*)Navigation$/', $name, $matches ) ) {
+    // trail index, album or navigation page?
+    if( preg_match( '/^(.*)(Index|Albums|Navigation)$/', $name, $matches ) ) {
       $name = $matches[1];
     }
 
@@ -412,5 +402,3 @@ class GalleryPageStore extends PageStore {
     return false;
   }
 }
-
-?>
