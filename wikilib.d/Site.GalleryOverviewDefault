@@ -1,14 +1,32 @@
-version=pmwiki-2.1.18 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+version=pmwiki-2.1.26 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
 author=schimmi
 csum=
 ctime=1158165865
 host=138.246.7.82
 name=Site.GalleryOverviewDefault
-rev=2
+rev=8
 targets=
-text=!{$Title}%0a(:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1158239137
+text=!{$Title}%0a%0a(:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%0a(:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1158329146
+author:1158329146=schimmi
+diff:1158329146:1158329115:=7d6%0a%3c %0a
+host:1158329146=138.246.7.82
+author:1158329115=schimmi
+diff:1158329115:1158328923:=3,6c3,4%0a%3c (:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%3c %0a%3c (:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a%3c %0a---%0a> (:pagelist fmt=#galleryalbums trail={$FullName}Albums:) (:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a> %0a
+host:1158329115=138.246.7.82
+author:1158328923=schimmi
+diff:1158328923:1158328897:=3,4c3,4%0a%3c (:pagelist fmt=#galleryalbums trail={$FullName}Albums:) (:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%3c %0a---%0a> (:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a> %0a
+host:1158328923=138.246.7.82
+author:1158328897=schimmi
+diff:1158328897:1158328878:=2a3,4%0a> (:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a> [[%3c%3c]]%0a
+host:1158328897=138.246.7.82
+author:1158328878=schimmi
+diff:1158328878:1158328736:=4c4%0a%3c [[%3c%3c]]%0a---%0a> %0a
+host:1158328878=138.246.7.82
+author:1158328736=schimmi
+diff:1158328736:1158239137:=2,4d1%0a%3c %0a%3c (:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a%3c %0a
+host:1158328736=138.246.7.82
 author:1158239137=schimmi
 diff:1158239137:1158165865:=3,4d2%0a%3c %0a%3c %25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
 host:1158239137=138.246.7.82
