@@ -110,6 +110,7 @@ function pageNameToFileName( $basePath, $pageName ) {
     $pathslash = "$path/";
   }
 
+  if ( !is_dir( $basePath . "/" . $path) ) return -1;
   $pwd = opendir( $basePath . "/" . $path);
   $found = "";
   while( ($file=readdir($pwd))!=false ) {
