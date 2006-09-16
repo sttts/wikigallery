@@ -266,8 +266,16 @@ function neighbourPicture( $name, $delta, $count=-1 ) {
   }
 }
 
+function WikiGalleryThumb( $path, $size ) {
+  global $WikiGallery_PhpThumb;
+  if( $size==0 )
+    return "$WikiGallery_PhpThumb?src=" . urlencode($path) . " ";
+  else
+    return "$WikiGallery_PhpThumb?w=" . urlencode($size) . "&src=" . urlencode($path) . " ";
+}
+
 function WikiGalleryPicture( $size, $path, $random=false ) {
-  global $WikiGallery_PhpThumb, $WikiGallery_PicturesBasePath;
+  global $WikiGallery_PicturesBasePath;
   $path = securePath( $path );
 
   // random picture?
@@ -282,10 +290,7 @@ function WikiGalleryPicture( $size, $path, $random=false ) {
   }
   
   // return phpthumb url
-  if( $size==0 )
-    return "$WikiGallery_PhpThumb?src=" . urlencode($path) . " ";
-  else
-    return "$WikiGallery_PhpThumb?w=" . urlencode($size) . "&src=" . urlencode($path) . " ";
+  return WikiGalleryThumb( $path, $size );
 }
 
 class GalleryPageStore extends PageStore {
