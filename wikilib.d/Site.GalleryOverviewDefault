@@ -5,10 +5,13 @@ csum=
 ctime=1158165865
 host=138.246.7.82
 name=Site.GalleryOverviewDefault
-rev=8
+rev=9
 targets=
-text=!{$Title}%0a%0a(:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%0a(:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1158329146
+text=(:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%0a(:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1158569716
+author:1158569716=schimmi
+diff:1158569716:1158329146:=0a1,2%0a> !{$Title}%0a> %0a
+host:1158569716=138.246.7.82
 author:1158329146=schimmi
 diff:1158329146:1158329115:=7d6%0a%3c %0a
 host:1158329146=138.246.7.82

@@ -1,14 +1,35 @@
-version=pmwiki-2.1.18 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
-author=Schimmi
+version=pmwiki-2.1.26 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
+author=schimmi
 csum=
 ctime=1158163725
-host=212.202.73.176
+host=82.135.92.163
 name=Site.GalleryListTemplates
-rev=39
+rev=46
 targets=Site.FullName
-text=[[#galleryoverview]]\%0a[[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]\%0a[[#galleryoverviewend]]%0a%0a[[#gallerynavigation]]\%0a[[{=$FullName}|(:gallerypicture 60 {=$GalleryPicture}:)]]\%0a[[#gallerynavigationend]]%0a%0a[[#galleryalbums]]%0a%25lframe thumb%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a[[#galleryalbumsend]]
-time=1158221824
+text=[[#galleryoverview]]\%0a[[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]\%0a[[#galleryoverviewend]]%0a%0a[[#gallerynavigation]]\%0a[[{=$FullName}|(:gallerypicture 60 {=$GalleryPicture}:)]]\%0a[[#gallerynavigationend]]%0a%0a[[#galleryalbums]]%0a%25lframe thumb%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a[[#galleryalbumsend]]%0a%0a[[#gallerylist]]%0a[[{=$FullName} | (:gallerypicture {$GallerySize} {=$GalleryPicture}:)]]%0a[[#gallerylistend]]%0a
+time=1158524163
+author:1158524163=schimmi
+diff:1158524163:1158524133:=14,15c14,15%0a%3c [[{=$FullName} | (:gallerypicture {$GallerySize} {=$GalleryPicture}:)]]%0a%3c [[#gallerylistend]]%0a---%0a> [[{=$FullName} | (:gallerypicture {$gallerysize} {=$GalleryPicture}:)]]%0a> [[#gallerylistend]]%0a\ No newline at end of file%0a
+host:1158524163=82.135.92.163
+author:1158524133=schimmi
+diff:1158524133:1158524115:=14c14%0a%3c [[{=$FullName} | (:gallerypicture {$gallerysize} {=$GalleryPicture}:)]]%0a---%0a> [[{=$FullName} | (:gallerypicture {=$gallerysize} {=$GalleryPicture}:)]]%0a
+host:1158524133=82.135.92.163
+author:1158524115=schimmi
+diff:1158524115:1158524093:=14c14%0a%3c [[{=$FullName} | (:gallerypicture {=$gallerysize} {=$GalleryPicture}:)]]%0a---%0a> [[{=$FullName} | (:gallerypicture {=$gallerysize} {=$GalleryAlbum}:)]]%0a
+host:1158524115=82.135.92.163
+author:1158524093=schimmi
+diff:1158524093:1158524078:=14c14%0a%3c [[{=$FullName} | (:gallerypicture {=$gallerysize} {=$GalleryAlbum}:)]]%0a---%0a> [[{=$FullName} | (:gallerypicture {$=gallerysize} {=$GalleryAlbum}:)]]%0a
+host:1158524093=82.135.92.163
+author:1158524078=schimmi
+diff:1158524078:1158524056:=14c14%0a%3c [[{=$FullName} | (:gallerypicture {$=gallerysize} {=$GalleryAlbum}:)]]%0a---%0a> [[{=$FullName} | (:gallerypicture {$gallerysize} {=$GalleryAlbum}:)]]%0a
+host:1158524078=82.135.92.163
+author:1158524056=schimmi
+diff:1158524056:1158523908:=14c14%0a%3c [[{=$FullName} | (:gallerypicture {$gallerysize} {=$GalleryAlbum}:)]]%0a---%0a> [[{=$FullName} | (:gallerypicturerandom {$gallerysize} {=$GalleryAlbum}:)]]%0a
+host:1158524056=82.135.92.163
+author:1158523908=schimmi
+diff:1158523908:1158221824:=11,15c11%0a%3c [[#galleryalbumsend]]%0a%3c %0a%3c [[#gallerylist]]%0a%3c [[{=$FullName} | (:gallerypicturerandom {$gallerysize} {=$GalleryAlbum}:)]]%0a%3c [[#gallerylistend]]%0a\ No newline at end of file%0a---%0a> [[#galleryalbumsend]]%0a\ No newline at end of file%0a
+host:1158523908=82.135.92.163
 author:1158221824=Schimmi
 diff:1158221824:1158221740:=10c10%0a%3c %25lframe thumb%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a---%0a> %25lframe%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%0a
 host:1158221824=212.202.73.176
