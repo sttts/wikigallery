@@ -24,6 +24,7 @@
 # Paths
 SDV($WikiGallery_PicturesBasePath, "pictures/"); // the base path to the galleries
 SDV($WikiGallery_PhpThumb, substr($PubDirUrl,0,strlen($PubDirUrl)-strlen(strrchr($PubDirUrl,"/"))) . "/phpThumb.php"  ); // the phpthumb script url
+SDV($WikiGallery_ThumbFunction, 'WikiGalleryThumb');  // by default creates PhpThumb URL using path above. Overwrite for other thumb scripts
 
 # Misc
 SDV($WikiGallery_NavThumbnailColumns, 5); // odd number
@@ -275,7 +276,7 @@ function WikiGalleryThumb( $path, $size ) {
 }
 
 function WikiGalleryPicture( $size, $path, $random=false ) {
-  global $WikiGallery_PicturesBasePath;
+  global $WikiGallery_PicturesBasePath, $WikiGallery_ThumbFunction;
   $path = securePath( $path );
 
   // random picture?
@@ -290,7 +291,7 @@ function WikiGalleryPicture( $size, $path, $random=false ) {
   }
   
   // return phpthumb url
-  return WikiGalleryThumb( $path, $size );
+  return $WikiGallery_ThumbFunction( $path, $size );
 }
 
 class GalleryPageStore extends PageStore {
