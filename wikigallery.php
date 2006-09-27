@@ -33,6 +33,7 @@ SDV($WikiGallery_SortBackwards, FALSE );
 SDV($WikiGallery_AlbumsSortByDate, TRUE ); // otherwise alphabetical
 SDV($WikiGallery_AlbumsSortBackwards, TRUE );
 SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
+SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 
 # Image sizes
 SDV($WikiGallery_DefaultSize, 640);
@@ -49,10 +50,10 @@ $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] :
 $FmtPV['$GalleryAlbum'] = '$page["galleryalbum"] ? $page["galleryalbum"] : ""';
 $FmtPV['$GalleryOverview'] = '$page["galleryoverview"] ? $page["galleryoverview"] : ""';
 $FmtPV['$GallerySize'] = '$GLOBALS["WikiGallery_Size"]';
-$FmtPV['$GalleryNext'] = 'neighbourPicture("$name",1)';
-$FmtPV['$GalleryNextNext'] = 'neighbourPicture("$name",2)';
-$FmtPV['$GalleryPrev'] = 'neighbourPicture("$name",-1)';
-$FmtPV['$GalleryPrevPrev'] = 'neighbourPicture("$name",-2)';
+$FmtPV['$GalleryNext'] = 'WikiGalleryNeightbourPicture("$name",1)';
+$FmtPV['$GalleryNextNext'] = 'WikiGalleryNeightbourPicture("$name",2)';
+$FmtPV['$GalleryPrev'] = 'WikiGalleryNeightbourPicture("$name",-1)';
+$FmtPV['$GalleryPrevPrev'] = 'WikiGalleryNeightbourPicture("$name",-2)';
 
 # default pages
 $WikiLibDirs[] = new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
@@ -78,8 +79,35 @@ if( isset($_GET["gallerysize"]) ) {
   $WikiGallery_Size = intval($_GET["gallerysize"]);
   setcookie("gallerysize", $WikiGallery_Size, time()+3600);
 }
-if( $WikiGallery_Size<0 || $WikiGallery_Size>10000 )
+if( $WikiGallery_Size<0 || $WikiGallery_Size>10000 ) {
   $WikiGallery_Size = $WikiGallery_DefaultSize;
+}
+     
+# slideshow?
+$HandleActions["slideshow"] = "WikiGallerySlideshow";
+function WikiGallerySlideshow( $pagename, $auth = 'read') {
+  global $WikiGallery_DefaultSlideshowDelay, $HTMLHeaderFmt;
+
+  # get delay from url
+  if( isset($_Get["delay"]) )
+    $delay = intval($_GET["delay"]);
+  else
+    $delay = $WikiGallery_DefaultSlideshowDelay;
+
+  # find following picture
+  $next = WikiGalleryNeightbourPicture( PageVar($pagename, '$Name'), 1 );
+  $group = PageVar($pagename, '$Group');
+  $nextpage = "$group.$next";
+
+  # exists?
+  if( $next && PageExists($nextpage) ) {
+    # add refresh header 
+    $url = MakeLink( $nextpage, $nextpage, NULL, NULL, "\$LinkUrl" );
+    array_unshift( $HTMLHeaderFmt, "<meta http-equiv=\"refresh\" content=\"$delay; URL=$url?action=slideshow&delay=$delay\" />" );
+  }
+  
+  return HandleBrowse( $pagename, $auth );
+}
 
 # filename <-> pagename conversion
 function fileNameToPageName( $filename ) {
@@ -132,7 +160,7 @@ function pageNameToFileName( $basePath, $pageName ) {
     return $pathslash . $found;
 }
 
-function securePath( $path ) {
+function WikiGallerySecurePath( $path ) {
   # ignore .. and beginning / in path
   $path = preg_replace( "/\\.\\./", '', $path );
   $path = preg_replace( "/^\\//", '', $path );
@@ -140,7 +168,7 @@ function securePath( $path ) {
   return $path;
 }
 
-function getFilenames( $path, $albums=false ) {
+function WikiGalleryGetFilenames( $path, $albums=false ) {
   global $WikiGallery_SortByDate, $WikiGallery_SortBackwards,
     $WikiGallery_AlbumsSortByDate, $WikiGallery_AlbumsSortBackwards,
     $WikiGallery_ImgExts;
@@ -208,7 +236,7 @@ function getFilenames( $path, $albums=false ) {
   }
 }
 
-function neighbourPicture( $name, $delta, $count=-1 ) {
+function WikiGalleryNeightbourPicture( $name, $delta, $count=-1 ) {
   global $WikiGallery_PicturesBasePath;
 
   // is it a file?
@@ -231,7 +259,7 @@ function neighbourPicture( $name, $delta, $count=-1 ) {
   }
 
   # find position in the album of the current picture
-  $pictures = getFilenames( $WikiGallery_PicturesBasePath . $slashpath );    
+  $pictures = WikiGalleryGetFilenames( $WikiGallery_PicturesBasePath . $slashpath );    
   $indexed = array();
   $i = 0;
   $thisIndex = -1;
@@ -277,12 +305,12 @@ function WikiGalleryThumb( $path, $size ) {
 
 function WikiGalleryPicture( $size, $path, $random=false ) {
   global $WikiGallery_PicturesBasePath, $WikiGallery_ThumbFunction;
-  $path = securePath( $path );
+  $path = WikiGallerySecurePath( $path );
 
   // random picture?
   if( $random ) {
     // get pictures
-    $pictures = getFilenames( $WikiGallery_PicturesBasePath . "/" . $path );
+    $pictures = WikiGalleryGetFilenames( $WikiGallery_PicturesBasePath . "/" . $path );
     if( !$pictures ) return false;
 
     // choose random picture
@@ -353,7 +381,7 @@ class GalleryPageStore extends PageStore {
 	$pagefileslash = "$pagefile/";
 
       // create trail of pictures
-      $pictures = getFilenames( $WikiGallery_PicturesBasePath . "/" . $pagefile );
+      $pictures = WikiGalleryGetFilenames( $WikiGallery_PicturesBasePath . "/" . $pagefile );
       if( !$pictures ) return false;
 
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
@@ -384,7 +412,7 @@ class GalleryPageStore extends PageStore {
 	$pagefileslash = "$pagefile/";
 
       // create trail of directories
-      $albums = getFilenames( $WikiGallery_PicturesBasePath . "/" . $pagefile, true );
+      $albums = WikiGalleryGetFilenames( $WikiGallery_PicturesBasePath . "/" . $pagefile, true );
       if( !$albums ) return false;
 
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
@@ -407,7 +435,7 @@ class GalleryPageStore extends PageStore {
       $name = $matches[1];
 
       // get neighbour pictures
-      $neighbours = neighbourPicture( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
+      $neighbours = WikiGalleryNeightbourPicture( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
 
       // create trail page
       $page = ReadPage( 'Site.GalleryIndexTemplate' );

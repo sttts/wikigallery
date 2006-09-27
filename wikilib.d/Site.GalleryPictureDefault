@@ -5,10 +5,67 @@ csum=
 ctime=1158140453
 host=138.246.7.82
 name=Site.GalleryPictureDefault
-rev=36
+rev=55
 targets=Site.GalleryPictureDefault
-text=%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%0a%25center%25 \%0a(:if ! equal "{$GalleryPrev}" "":)[[{$GalleryPrev}|%3c-]] (:ifend:) \%0a[[{$GalleryOverview}|Overview]] \%0a(:if ! equal "{$GalleryNext}" "":) [[{$GalleryNext}|->]](:ifend:)%0a%0a(:if equal "{$GalleryNext}" "":)%0a%25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a(:if ! equal "{$GalleryNext}" "":)%0a%25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:ifend:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1158570160
+text=%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%0a%25center%25 \%0a(:if ! equal "{$GalleryPrev}" "":)[[{$GalleryPrev}|%3c-]] (:ifend:) \%0a[[{$GalleryOverview}|$[Overview]]] \%0a(:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a(:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a(:if ( ! equal {$Action} slideshow )  && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}|->]] \%0a(:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}?action=slideshow|->]] \%0a(:ifend:)%0a%0a(:if ( ! equal {$Action} slideshow ) && equal "{$GalleryNext}" "":) %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a(:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:if equal {$Action} slideshow:) %25center%25 [[{$FullName}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:ifend:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%0a%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1159358371
+author:1159358371=schimmi
+diff:1159358371:1159358354:=6c6,8%0a%3c (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a---%0a> %0a> (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "") :) [[{$FullName}|$[Stop]]] (:ifend:)%0a> %0a
+host:1159358371=138.246.7.82
+author:1159358354=schimmi
+diff:1159358354:1159358308:=7,8c7,8%0a%3c (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "") :) [[{$FullName}|$[Stop]]] (:ifend:)%0a%3c %0a---%0a> (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] (:ifend:)%0a> %0a
+host:1159358354=138.246.7.82
+author:1159358308=schimmi
+diff:1159358308:1159358254:=6,8c6%0a%3c %0a%3c (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] (:ifend:)%0a%3c %0a---%0a> (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a
+host:1159358308=138.246.7.82
+author:1159358254=schimmi
+diff:1159358254:1159358203:=6c6%0a%3c (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a---%0a> (:if equal {$Action} slideshow && ! equal "{$GalleryNext}" "" :) [[{$FullName}|$[Stop]]] \%0a
+host:1159358254=138.246.7.82
+author:1159358203=schimmi
+diff:1159358203:1159358150:=6c6%0a%3c (:if equal {$Action} slideshow && ! equal "{$GalleryNext}" "" :) [[{$FullName}|$[Stop]]] \%0a---%0a> (:if ( ! equal "{$GalleryNext}" "" ) && equal {$Action} slideshow :) [[{$FullName}|$[Stop]]] \%0a
+host:1159358203=138.246.7.82
+author:1159358150=schimmi
+diff:1159358150:1159358062:=6c6%0a%3c (:if ( ! equal "{$GalleryNext}" "" ) && equal {$Action} slideshow :) [[{$FullName}|$[Stop]]] \%0a---%0a> (:if ( ! equal "{$GalleryNext}" "" ) && equal {$Action} slideshow:) [[{$FullName}|$[Stop]]] \%0a
+host:1159358150=138.246.7.82
+author:1159358062=schimmi
+diff:1159358062:1159357994:=12,14c12,13%0a%3c (:if ( ! equal {$Action} slideshow ) && equal "{$GalleryNext}" "":) %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%3c (:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a%3c (:if equal {$Action} slideshow:) %25center%25 [[{$FullName}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a---%0a> (:if ( ! equal {$Action} slideshow ) && equal "{$GalleryNext}" "":)%0a> %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a16c15,21%0a%3c %0a---%0a> (:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :)%0a> %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a> (:ifend:)%0a> (:if equal {$Action} slideshow:)%0a> %25center%25 [[{$FullName}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a> (:ifend:)%0a> %0a
+host:1159358062=138.246.7.82
+author:1159357994=schimmi
+diff:1159357994:1159357956:=6c6%0a%3c (:if ( ! equal "{$GalleryNext}" "" ) && equal {$Action} slideshow:) [[{$FullName}|$[Stop]]] \%0a---%0a> (:if equal {$Action} slideshow:) [[{$FullName}|$[Stop]]] \%0a
+host:1159357994=138.246.7.82
+author:1159357956=schimmi
+diff:1159357956:1159357795:=6,9c6,13%0a%3c (:if equal {$Action} slideshow:) [[{$FullName}|$[Stop]]] \%0a%3c (:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a%3c (:if ( ! equal {$Action} slideshow )  && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}|->]] \%0a%3c (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}?action=slideshow|->]] \%0a---%0a> (:if equal {$Action} slideshow:) \%0a> [[{$FullName}|$[Stop]]] \%0a> (:ifend:) \%0a> (:if ! equal {$Action} slideshow && ! equal "{$GalleryNext}" "":) \%0a> [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a> (:ifend:) \%0a> (:if ! equal "{$GalleryNext}" "":) \%0a> [[{$GalleryNext}|->]] \%0a
+host:1159357956=138.246.7.82
+author:1159357795=schimmi
+diff:1159357795:1159357739:=16c16%0a%3c (:if ( ! equal {$Action} slideshow ) && equal "{$GalleryNext}" "":)%0a---%0a> (:if ! equal {$Action} slideshow && equal "{$GalleryNext}" "":)%0a19c19%0a%3c (:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :)%0a---%0a> (:if ! equal {$Action} slideshow && ! equal "{$GalleryNext}" "":)%0a
+host:1159357795=138.246.7.82
+author:1159357739=schimmi
+diff:1159357739:1159357643:=16c16%0a%3c (:if ! equal {$Action} slideshow && equal "{$GalleryNext}" "":)%0a---%0a> (:if equal "{$GalleryNext}" "":)%0a17a18,19%0a> (:if ! equal "{$GalleryNext}" "":)%0a> %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a19,25c21%0a%3c (:if ! equal {$Action} slideshow && ! equal "{$GalleryNext}" "":)%0a%3c %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a%3c (:ifend:)%0a%3c (:if equal {$Action} slideshow:)%0a%3c %25center%25 [[{$FullName}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a%3c (:ifend:)%0a%3c %0a---%0a> %0a
+host:1159357739=138.246.7.82
+author:1159357643=schimmi
+diff:1159357643:1159357607:=7c7%0a%3c [[{$FullName}|$[Stop]]] \%0a---%0a> [[{$FullName}?action=slideshow|$[Stop]]] \%0a
+host:1159357643=138.246.7.82
+author:1159357607=schimmi
+diff:1159357607:1159357542:=9c9%0a%3c (:if ! equal {$Action} slideshow && ! equal "{$GalleryNext}" "":) \%0a---%0a> (:if ! equal {$Action} slideshow:) \%0a
+host:1159357607=138.246.7.82
+author:1159357542=schimmi
+diff:1159357542:1159357279:=6,15c6,7%0a%3c (:if equal {$Action} slideshow:) \%0a%3c [[{$FullName}?action=slideshow|$[Stop]]] \%0a%3c (:ifend:) \%0a%3c (:if ! equal {$Action} slideshow:) \%0a%3c [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a%3c (:ifend:) \%0a%3c (:if ! equal "{$GalleryNext}" "":) \%0a%3c [[{$GalleryNext}|->]] \%0a%3c (:ifend:)%0a%3c %0a---%0a> (:if ! equal "{$GalleryNext}" "":) [[{$FullName}?action=slideshow|$[Slideshow]]] [[{$GalleryNext}|->]](:ifend:)%0a> %0a
+host:1159357542=138.246.7.82
+author:1159357279=schimmi
+diff:1159357279:1159357264:=6,7c6,7%0a%3c (:if ! equal "{$GalleryNext}" "":) [[{$FullName}?action=slideshow|$[Slideshow]]] [[{$GalleryNext}|->]](:ifend:)%0a%3c %0a---%0a> (:if ! equal "{$GalleryNext}" "":) [[{$FullName}?action=slideshow|$[Slideshow]]] \ [[{$GalleryNext}|->]](:ifend:)%0a> %0a
+host:1159357279=138.246.7.82
+author:1159357264=schimmi
+diff:1159357264:1159353739:=6,7c6,8%0a%3c (:if ! equal "{$GalleryNext}" "":) [[{$FullName}?action=slideshow|$[Slideshow]]] \ [[{$GalleryNext}|->]](:ifend:)%0a%3c %0a---%0a> [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a> (:if ! equal "{$GalleryNext}" "":) [[{$GalleryNext}|->]](:ifend:)%0a> %0a
+host:1159357264=138.246.7.82
+author:1159353739=schimmi
+diff:1159353739:1158667894:=5,6c5%0a%3c [[{$GalleryOverview}|$[Overview]]] \%0a%3c [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a---%0a> [[{$GalleryOverview}|Overview]] \%0a
+host:1159353739=138.246.7.82
+author:1158667894=schimmi
+diff:1158667894:1158667838:=18,19c18,19%0a%3c %0a%3c %0a---%0a> %25comment%25 (:include {$GalleryNext}:)%0a> %0a
+host:1158667894=138.246.7.82
+author:1158667838=schimmi
+diff:1158667838:1158570160:=18,19d17%0a%3c %25comment%25 (:include {$GalleryNext}:)%0a%3c %0a
+host:1158667838=138.246.7.82
 author:1158570160=schimmi
 diff:1158570160:1158569651:=1,13d0%0a%3c %25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%3c %0a%3c %25center%25 \%0a%3c (:if ! equal "{$GalleryPrev}" "":)[[{$GalleryPrev}|%3c-]] (:ifend:) \%0a%3c [[{$GalleryOverview}|Overview]] \%0a%3c (:if ! equal "{$GalleryNext}" "":) [[{$GalleryNext}|->]](:ifend:)%0a%3c %0a%3c (:if equal "{$GalleryNext}" "":)%0a%3c %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a%3c (:if ! equal "{$GalleryNext}" "":)%0a%3c %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a%3c (:ifend:)%0a%3c %0a
 host:1158570160=138.246.7.82
