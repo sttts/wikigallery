@@ -1,14 +1,17 @@
 version=pmwiki-2.1.26 ordered=1 urlencoded=1
 agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
-author=schimmi
+author=test
 csum=
 ctime=1158140453
-host=138.246.7.82
+host=141.84.9.37
 name=Site.GalleryPictureDefault
-rev=55
+rev=56
 targets=Site.GalleryPictureDefault
-text=%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%0a%25center%25 \%0a(:if ! equal "{$GalleryPrev}" "":)[[{$GalleryPrev}|%3c-]] (:ifend:) \%0a[[{$GalleryOverview}|$[Overview]]] \%0a(:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a(:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a(:if ( ! equal {$Action} slideshow )  && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}|->]] \%0a(:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}?action=slideshow|->]] \%0a(:ifend:)%0a%0a(:if ( ! equal {$Action} slideshow ) && equal "{$GalleryNext}" "":) %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a(:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:if equal {$Action} slideshow:) %25center%25 [[{$FullName}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:ifend:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a%0a%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1159358371
+text=%25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a%0a%25center%25 \%0a(:if ! equal "{$GalleryPrev}" "":)[[{$GalleryPrev}|%3c-]] (:ifend:) \%0a[[{$GalleryOverview}|$[Overview]]] \%0a(:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a(:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}?action=slideshow|$[Slideshow]]] \%0a(:if ( ! equal {$Action} slideshow )  && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}|->]] \%0a(:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$GalleryNext}?action=slideshow|->]] \%0a(:ifend:)%0a%0a(:if ( ! equal {$Action} slideshow ) && equal "{$GalleryNext}" "":) %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a(:if ( ! equal {$Action} slideshow ) && ( ! equal "{$GalleryNext}" "" ) :) %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:if equal {$Action} slideshow:) %25center%25 [[{$FullName}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a(:ifend:)%0a%0a%25center%25 [ [[{$FullName}?gallerysize=400|400]] - [[{$FullName}?gallerysize=600|600]] -%0a[[{$FullName}?gallerysize=800|800]] -%0a%25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|$[full]]] ]%0a%0a%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1159439752
+author:1159439752=test
+diff:1159439752:1159358371:=19,22c19,22%0a%3c %25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|$[full]]] ]%0a%3c %0a%3c %0a%3c %0a---%0a> %25newwin%25 [[(:gallerypicture 0 {$GalleryPicture}:)|full]] ]%0a> %0a> %0a> %0a
+host:1159439752=141.84.9.37
 author:1159358371=schimmi
 diff:1159358371:1159358354:=6c6,8%0a%3c (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "" ) :) [[{$FullName}|$[Stop]]] \%0a---%0a> %0a> (:if equal {$Action} slideshow && ( ! equal "{$GalleryNext}" "") :) [[{$FullName}|$[Stop]]] (:ifend:)%0a> %0a
 host:1159358371=138.246.7.82
