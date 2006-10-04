@@ -50,6 +50,7 @@ $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] :
 $FmtPV['$GalleryAlbum'] = '$page["galleryalbum"] ? $page["galleryalbum"] : ""';
 $FmtPV['$GalleryOverview'] = '$page["galleryoverview"] ? $page["galleryoverview"] : ""';
 $FmtPV['$GallerySize'] = '$GLOBALS["WikiGallery_Size"]';
+$FmtPV['$GalleryParent'] = 'WikiGalleryParent("$name")';
 $FmtPV['$GalleryNext'] = 'WikiGalleryNeightbourPicture("$name",1)';
 $FmtPV['$GalleryNextNext'] = 'WikiGalleryNeightbourPicture("$name",2)';
 $FmtPV['$GalleryPrev'] = 'WikiGalleryNeightbourPicture("$name",-1)';
@@ -295,6 +296,23 @@ function WikiGalleryNeightbourPicture( $name, $delta, $count=-1 ) {
   }
 }
 
+function WikiGalleryParent( $name ) {
+  global $WikiGallery_PicturesBasePath;
+
+  // is it a directory?
+  $pagefile = pageNameToFileName( $WikiGallery_PicturesBasePath, $name );
+  if( $pagefile==-1 && ! is_dir($WikiGallery_PicturesBasePath . "/" . $pagefile) )
+    return false;
+
+  # split pathes into filename and path
+  $slashfilename = strrchr($pagefile,"/");
+  if( $slashfilename==FALSE ) return "";
+  
+  # return parent page
+  $path = substr($pagefile,0,strlen($pagefile)-strlen($slashfilename));
+  return fileNameToPageName( $path );
+}
+
 function WikiGalleryThumb( $path, $size ) {
   global $WikiGallery_PhpThumb;
   if( $size==0 )
@@ -359,7 +377,8 @@ class GalleryPageStore extends PageStore {
   }
 
   function read($pagename, $since=0) {
-    global $WikiGallery_PicturesBasePath, $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now, $WikiGallery_NavThumbnailColumns;
+    global $WikiGallery_PicturesBasePath, $WikiGallery_OverviewThumbnailWidth, 
+      $SiteGroup, $Now, $WikiGallery_NavThumbnailColumns;
 
     // In gallery group?
     if( PageVar($pagename, '$Group')!=$this->galleryGroup )
