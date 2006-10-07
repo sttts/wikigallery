@@ -28,25 +28,29 @@ SDV($WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath); // the path to
 SDV($WikiGallery_CacheWebPath, "cache/"); // the path to the thumbnail cache (relative to the host url http://foo.com/)
 SDV($WikiGallery_CacheBasePath, $WikiGallery_CacheWebPath); // the path to the thumbnail cache (on the filesystem, relative to pmwiki.php)
 
-SDV($WikiGallery_PhpThumb, substr($PubDirUrl,0,strlen($PubDirUrl)-strlen(strrchr($PubDirUrl,"/"))) . "/phpThumb.php"  ); // the phpthumb script url
 SDV($WikiGallery_ImageMagickPath, "/usr/bin/"); // absolute path to the ImageMagick binaries (mogrify, convert, ...)
+SDV($WikiGallery_FindPath, ""); // path to the find command, usually /usr/bin/
+SDV($WikiGallery_PhpThumb, substr($PubDirUrl,0,strlen($PubDirUrl)-strlen(strrchr($PubDirUrl,"/"))) . "/phpThumb.php"  ); // the phpthumb script url
 
-# Misc
+# How the wiki pages look like
 SDV($WikiGallery_NavThumbnailColumns, 5); // odd number
 SDV($WikiGallery_SortByDate, FALSE ); // otherwise alphabetical
 SDV($WikiGallery_SortBackwards, FALSE );
 SDV($WikiGallery_AlbumsSortByDate, TRUE ); // otherwise alphabetical
 SDV($WikiGallery_AlbumsSortBackwards, TRUE );
-SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
 SDV($WikiGallery_DefaultSlideshowDelay, 5 );
-SDV($WikiGallery_ThumbFunction, 'WikiGalleryPhpThumb');  // by default creates PhpThumb URL using path above. Overwrite for other thumb scripts
+
+# Thumbnail generation
+SDV($WikiGallery_ThumbFunction, 'WikiGalleryInternalThumb');  // use internal thumbnail routine. Set to 'WikiGalleryPhpThumb' for phpthumb
 SDV($WikiGallery_HighQualityResize, false); // use better quality (but slower) resize algorithms?
 SDV($WikiGallery_UseAuthorization, false); // try to authorize for the page the picture/thumbnail is belonging to
+
+# Clean up of thumbnail cache
 SDV($WikiGallery_CleanupDelay, 7); // if nobody accessed a thumbnail for a week, purge it
 SDV($WikiGallery_CleanupInterval, 3600); // cleanup once an hour
-SDV($WikiGallery_FindPath, ""); // path to the find command, usually /usr/bin/
 
-# Image sizes
+# Misc
+SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
 SDV($WikiGallery_DefaultSize, 640);
 
 ################################################################################
