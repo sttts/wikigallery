@@ -22,9 +22,14 @@
  */
 
 # Paths
-SDV($WikiGallery_PicturesBasePath, "pictures/"); // the base path to the galleries
+SDV($WikiGallery_PicturesWebPath, "pictures/"); // the path to the galleries (relative to the host url http://foo.com/)
+SDV($WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath); // the path to the galleries (on the filesystem, relative to pmwiki.php)
+
+SDV($WikiGallery_CacheWebPath, "cache/"); // the path to the thumbnail cache (relative to the host url http://foo.com/)
+SDV($WikiGallery_CacheBasePath, $WikiGallery_CacheWebPath); // the path to the thumbnail cache (on the filesystem, relative to pmwiki.php)
+
 SDV($WikiGallery_PhpThumb, substr($PubDirUrl,0,strlen($PubDirUrl)-strlen(strrchr($PubDirUrl,"/"))) . "/phpThumb.php"  ); // the phpthumb script url
-SDV($WikiGallery_ThumbFunction, 'WikiGalleryThumb');  // by default creates PhpThumb URL using path above. Overwrite for other thumb scripts
+SDV($WikiGallery_ImageMagickPath, "/usr/bin/"); // absolute path to the ImageMagick binaries (mogrify, convert, ...)
 
 # Misc
 SDV($WikiGallery_NavThumbnailColumns, 5); // odd number
@@ -34,6 +39,9 @@ SDV($WikiGallery_AlbumsSortByDate, TRUE ); // otherwise alphabetical
 SDV($WikiGallery_AlbumsSortBackwards, TRUE );
 SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
 SDV($WikiGallery_DefaultSlideshowDelay, 5 );
+SDV($WikiGallery_ThumbFunction, 'WikiGalleryPhpThumb');  // by default creates PhpThumb URL using path above. Overwrite for other thumb scripts
+SDV($WikiGallery_HighQualityResize, false); // use better quality (but slower) resize algorithms?
+SDV($WikiGallery_UseAuthorization, false); // always try to authorize for the page the picture/thumbnail is belonging to
 
 # Image sizes
 SDV($WikiGallery_DefaultSize, 640);
@@ -66,7 +74,8 @@ $WikiGallery_ImgExts = '\.jpg$|\.jpeg$|\.jpe$|\.png$|\.bmp$';
 $pagename = preg_replace ('/'.$WikiGallery_ImgExts.'$/','',$pagename );
 
 # no trailing / 
-preg_replace( "/\\/$/", '', $WikiGallery_PicturesBasePath);
+$WikiGallery_PicturesBasePath = preg_replace( "/\\/$/", '', $WikiGallery_PicturesBasePath);
+$WikiGallery_CacheBasePath = preg_replace( "/\\/$/", '', $WikiGallery_CacheBasePath);
 
 # add Site.GalleryListTemplates to the list of fmt=#xyz options for pagelists
 $FPLTemplatePageFmt[] = '{$SiteGroup}.GalleryListTemplates';
@@ -313,17 +322,9 @@ function WikiGalleryParent( $name ) {
   return fileNameToPageName( $path );
 }
 
-function WikiGalleryThumb( $path, $size ) {
-  global $WikiGallery_PhpThumb;
-  if( $size==0 )
-    return "$WikiGallery_PhpThumb?src=" . urlencode($path) . " ";
-  else
-    return "$WikiGallery_PhpThumb?w=" . urlencode($size) . "&src=" . urlencode($path) . " ";
-}
-
 function WikiGalleryPicture( $size, $path, $random=false ) {
   global $WikiGallery_PicturesBasePath, $WikiGallery_ThumbFunction;
-  $path = WikiGallerySecurePath( $path );
+  $path = WikiGallerySecurePath( $path );  
 
   // random picture?
   if( $random ) {
@@ -501,4 +502,108 @@ class GalleryPageStore extends PageStore {
 
     return false;
   }
+}
+
+function WikiGalleryPhpThumb( $path, $size ) {
+  global $WikiGallery_PhpThumb;
+  if( $size==0 )
+    return "$WikiGallery_PhpThumb?src=" . urlencode($path) . " ";
+  else
+    return "$WikiGallery_PhpThumb?w=" . urlencode($size) . "&src=" . urlencode($path) . " ";
+}
+
+function WikiGalleryInternalThumb( $path, $size ) {
+  global $WikiGallery_UseAuthorization, $WikiGallery_CacheWebPath,
+    $WikiGallery_PicturesWebPath, $WikiGallery_CacheBasePath;
+  
+  // we can use a direct url to the file if authorization is not needed
+  if( !$WikiGallery_UseAuthorization ) {
+    if( $size==0 )
+      // give direct url to the original file
+      return 'http://'.$_SERVER['HTTP_HOST']."/".$WikiGallery_PicturesWebPath . $path;
+    else {
+      // give direct url to the cache file
+      $thumbnail = WikiGalleryInternalThumbCacheName( $path, $size );
+      if( is_file( $WikiGallery_CacheBasePath . "/" . $thumbnail ) )
+	// ok, thumbnail exists, otherwise fall through
+	return 'http://'.$_SERVER['HTTP_HOST']."/".$WikiGallery_CacheWebPath . $thumbnail;
+    }
+  }
+
+  if( $size==0 )
+    return FmtPageName('$PageUrl','{$FullName}') . '?action=thumbnail&image=' . urlencode($path) . ' ';
+  else
+    return FmtPageName('$PageUrl','{$FullName}') . '?action=thumbnail&width=' . $size . '&image=' . urlencode($path) . ' ';
+}
+
+$HandleActions["thumbnail"] = 'WikiGalleryThumbnail';
+
+function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
+  global $WikiGallery_CacheBasePath;
+  if( $width!=0 || $height!=0 )
+    $size=intval($width)."x".intval($height);
+  else
+    $size = "original";
+
+  $ext = substr( strrchr( $path, "." ), 1 );
+  return $path . "/" . $size . "." . $ext;
+}
+
+function WikiGalleryThumbnail( $pagename, $auth = "thumbnail" ) {
+  global $WikiGallery_PicturesBasePath, $WikiGallery_ImageMagickPath,
+    $WikiGallery_HighQualityResize, $WikiGallery_CacheBasePath;
+
+  // get filename
+  if( !isset( $_GET["image"] ) ) Abort('no image given');
+  $path = WikiGallerySecurePath( urldecode($_GET["image"]) );
+  $pagename = fileNameToPageName( $path );
+
+  // exists?
+  if( !is_file( $WikiGallery_PicturesBasePath . "/" . $path ) ) Abort('image doesn\'t exist');
+
+  // check authorization
+  $page = RetrieveAuthPage($pagename, $auth, true, READPAGE_CURRENT);
+  if (!$page) Abort('?cannot read $pagename');
+  PCache($pagename,$page);
+  $original = $WikiGallery_PicturesBasePath . "/" . $path;
+
+  // get size
+  $width = intval(@$_GET["width"]);
+  $height = intval(@$_GET["height"]);
+  if( $width<0 || $width>1600 ) $width=0;
+  if( $height<0 || $height>1200 ) $height=0;
+
+  // resize?
+  if( $width==0 && $height==0 ) {
+    $filename = $original;
+  } else {
+    // resize
+    $filename = $WikiGallery_CacheBasePath . "/" . WikiGalleryInternalThumbCacheName( $path, $width, $height );
+    if( !is_file( $filename ) ) {
+      // get size
+      if( $width==0 ) $size="x".intval($height); 
+      elseif( $height==0 ) $size=intval($width);
+      else $size=intval($width)."x".intval($height);
+
+      // make directory
+      $dir = dirname($filename); 
+      mkdirp($dir);
+
+      // call ImageMagick to scale
+      if( $WikiGallery_HighQualityResize )
+	$command = $WikiGallery_ImageMagickPath . "convert -size $size -resize $size +profile \"*\" " . 
+	  escapeshellarg($original) . " " . escapeshellarg($filename);
+      else
+	$command = $WikiGallery_ImageMagickPath . "convert -scale $size " . 
+	  escapeshellarg($original) . " " . escapeshellarg($filename);
+      if( @system($command)<0 ){
+	Abort("Unable to generate thumbnail, check your impath variable and make sure imagemagick is installed.<br>");
+      }
+    }
+  }
+
+  // output picture
+  header( "Content-type: " . mime_content_type( $original ) );
+  print file_get_contents( $filename );
+  exit;
 }
