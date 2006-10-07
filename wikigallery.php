@@ -519,13 +519,13 @@ function WikiGalleryInternalThumb( $path, $size ) {
   if( !$WikiGallery_UseAuthorization ) {
     if( $size==0 )
       // give direct url to the original file
-      return 'http://'.$_SERVER['HTTP_HOST']."/".$WikiGallery_PicturesWebPath . $path;
+      return 'http://'.$_SERVER['HTTP_HOST']."/".preg_replace("/ /","%20", $WikiGallery_PicturesWebPath . $path);
     else {
       // give direct url to the cache file
       $thumbnail = WikiGalleryInternalThumbCacheName( $path, $size );
       if( is_file( $WikiGallery_CacheBasePath . "/" . $thumbnail ) )
 	// ok, thumbnail exists, otherwise fall through
-	return 'http://'.$_SERVER['HTTP_HOST']."/".$WikiGallery_CacheWebPath . $thumbnail;
+	return 'http://'.$_SERVER['HTTP_HOST']."/".preg_replace("/ /","%20",$WikiGallery_CacheWebPath . $thumbnail);
     }
   }
 
