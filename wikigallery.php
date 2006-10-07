@@ -42,6 +42,9 @@ SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 SDV($WikiGallery_ThumbFunction, 'WikiGalleryPhpThumb');  // by default creates PhpThumb URL using path above. Overwrite for other thumb scripts
 SDV($WikiGallery_HighQualityResize, false); // use better quality (but slower) resize algorithms?
 SDV($WikiGallery_UseAuthorization, false); // try to authorize for the page the picture/thumbnail is belonging to
+SDV($WikiGallery_CleanupDelay, 7); // if nobody accessed a thumbnail for a week, purge it
+SDV($WikiGallery_CleanupInterval, 3600); // cleanup once an hour
+SDV($WikiGallery_FindPath, ""); // path to the find command, usually /usr/bin/
 
 # Image sizes
 SDV($WikiGallery_DefaultSize, 640);
@@ -523,9 +526,13 @@ function WikiGalleryInternalThumb( $path, $size ) {
     else {
       // give direct url to the cache file
       $thumbnail = WikiGalleryInternalThumbCacheName( $path, $size );
-      if( is_file( $WikiGallery_CacheBasePath . "/" . $thumbnail ) )
+      if( is_file( $WikiGallery_CacheBasePath . "/" . $thumbnail ) ) {
+	// touch it so that it is not purged during cleanup
+	touch( $WikiGallery_CacheBasePath . "/" . $thumbnail );
+	
 	// ok, thumbnail exists, otherwise fall through
 	return 'http://'.$_SERVER['HTTP_HOST']."/".preg_replace("/ /","%20",$WikiGallery_CacheWebPath . $thumbnail);
+      }
     }
   }
 
@@ -534,8 +541,6 @@ function WikiGalleryInternalThumb( $path, $size ) {
   else
     return FmtPageName('$PageUrl','{$FullName}') . '?action=thumbnail&width=' . $size . '&image=' . urlencode($path) . ' ';
 }
-
-$HandleActions["thumbnail"] = 'WikiGalleryThumbnail';
 
 function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
   global $WikiGallery_CacheBasePath;
@@ -548,6 +553,7 @@ function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
   return $path . "/" . $size . "." . $ext;
 }
 
+$HandleActions["thumbnail"] = 'WikiGalleryThumbnail';
 function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
   global $WikiGallery_PicturesBasePath, $WikiGallery_ImageMagickPath,
     $WikiGallery_HighQualityResize, $WikiGallery_CacheBasePath,
@@ -601,6 +607,9 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
       if( @system($command)<0 ){
 	Abort("Unable to generate thumbnail, check your impath variable and make sure imagemagick is installed.<br>");
       }
+    } else {
+      // touch it so that it is not purged during cleanup
+      touch( $filename );      
     }
   }
 
@@ -608,4 +617,39 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
   header( "Content-type: " . mime_content_type( $original ) );
   print file_get_contents( $filename );
   exit;
+}
+
+// cleanup of thumbnails
+$WikiGallery_CleanupTimestamp = $WikiGallery_CacheBasePath . "/.cleanup-timestamp";
+if( !file_exists( $WikiGallery_CleanupTimestamp ) ) {
+  touch( $WikiGallery_CleanupTimestamp );
+} else {
+  // clean up, but not too often
+  if( time()-filemtime($WikiGallery_CleanupTimestamp )>$WikiGallery_CleanupInterval ) {
+#    WikiGalleryCleanupCache();
+    register_shutdown_function( 'WikiGalleryCleanupCache' );
+  }
+}
+
+function WikiGalleryCleanupCache() {
+  global $WikiGallery_CacheBasePath, $WikiGallery_CleanupDelay,
+    $WikiGallery_CleanupTimestamp, $WikiGallery_FindPath;
+
+  // mark that cleanup was run
+  touch( $WikiGallery_CleanupTimestamp );
+
+  // delete old files
+  $command = $WikiGallery_FindPath . "find " . escapeshellarg($WikiGallery_CacheBasePath) . 
+    " -type f -mtime +$WikiGallery_CleanupDelay -exec rm -f {} \\;";  
+#  echo "kkkkkkkkkkkkkkkkkkkkkkkkkkkk $command";
+  if( @system( $command )<0 ) {
+    Abort( "Error during cleanup of old thumbnails" );
+  }
+
+  // delete empty directories
+  $command = $WikiGallery_FindPath . "find " . escapeshellarg($WikiGallery_CacheBasePath) .
+    " -depth -type d -empty -exec rmdir {} \\;";
+  if( @system( $command )<0 ) {
+    Abort( "Error during cleanup of old thumbnails while deleting empty directories" );
+  }
 }
