@@ -41,7 +41,7 @@ SDV($WikiGallery_PathDelimiter, "-" ); // must be something valid in page names
 SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 SDV($WikiGallery_ThumbFunction, 'WikiGalleryPhpThumb');  // by default creates PhpThumb URL using path above. Overwrite for other thumb scripts
 SDV($WikiGallery_HighQualityResize, false); // use better quality (but slower) resize algorithms?
-SDV($WikiGallery_UseAuthorization, false); // always try to authorize for the page the picture/thumbnail is belonging to
+SDV($WikiGallery_UseAuthorization, false); // try to authorize for the page the picture/thumbnail is belonging to
 
 # Image sizes
 SDV($WikiGallery_DefaultSize, 640);
@@ -51,7 +51,6 @@ SDV($WikiGallery_DefaultSize, 640);
 # The markup:
 Markup('(:gallerypicture width picture:)','><|',"/\\(:gallerypicture\\s([0-9]+)\\s([^:]*):\\)/e","WikiGalleryPicture('$1','$2')");
 Markup('(:gallerypicturerandom width album:)','><|',"/\\(:gallerypicturerandom\\s([0-9]+)\\s([^:]*):\\)/e","WikiGalleryPicture('$1','$2',true)");
-#Markup('(:galleryoverviewtitle:)','<inline',"/\\(:galleryoverviewtitle:\\)/e", '$page["galleryoverview"]');
 
 # Page variables
 $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] : ""';
@@ -549,9 +548,10 @@ function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
   return $path . "/" . $size . "." . $ext;
 }
 
-function WikiGalleryThumbnail( $pagename, $auth = "thumbnail" ) {
+function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
   global $WikiGallery_PicturesBasePath, $WikiGallery_ImageMagickPath,
-    $WikiGallery_HighQualityResize, $WikiGallery_CacheBasePath;
+    $WikiGallery_HighQualityResize, $WikiGallery_CacheBasePath,
+    $WikiGallery_UseAuthorization;
 
   // get filename
   if( !isset( $_GET["image"] ) ) Abort('no image given');
@@ -559,13 +559,15 @@ function WikiGalleryThumbnail( $pagename, $auth = "thumbnail" ) {
   $pagename = fileNameToPageName( $path );
 
   // exists?
-  if( !is_file( $WikiGallery_PicturesBasePath . "/" . $path ) ) Abort('image doesn\'t exist');
+  $original = $WikiGallery_PicturesBasePath . "/" . $path;
+  if( !is_file( $original ) ) Abort('image doesn\'t exist');
 
   // check authorization
-  $page = RetrieveAuthPage($pagename, $auth, true, READPAGE_CURRENT);
-  if (!$page) Abort('?cannot read $pagename');
-  PCache($pagename,$page);
-  $original = $WikiGallery_PicturesBasePath . "/" . $path;
+  if( $WikiGallery_UseAuthorization ) {
+    $page = RetrieveAuthPage($pagename, $auth, true, READPAGE_CURRENT);
+    if (!$page) Abort('?cannot read $pagename');
+    PCache($pagename,$page);
+  }
 
   // get size
   $width = intval(@$_GET["width"]);
