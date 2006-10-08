@@ -43,7 +43,7 @@ SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 # Thumbnail generation
 SDV($WikiGallery_ThumbFunction, 'WikiGalleryInternalThumb');  // use internal thumbnail routine. Set to 'WikiGalleryPhpThumb' for phpthumb
 SDV($WikiGallery_HighQualityResize, false); // use better quality (but slower) resize algorithms?
-SDV($WikiGallery_UseAuthorization, false); // try to authorize for the page the picture/thumbnail is belonging to
+SDV($WikiGallery_UseAuthorization, true); // try to authorize for the page the picture/thumbnail is belonging to
 
 # Clean up of thumbnail cache
 SDV($WikiGallery_CleanupDelay, 7); // if nobody accessed a thumbnail for a week, purge it
@@ -520,7 +520,8 @@ function WikiGalleryPhpThumb( $path, $size ) {
 
 function WikiGalleryInternalThumb( $path, $size ) {
   global $WikiGallery_UseAuthorization, $WikiGallery_CacheWebPath,
-    $WikiGallery_PicturesWebPath, $WikiGallery_CacheBasePath;
+    $WikiGallery_PicturesWebPath, $WikiGallery_CacheBasePath,
+    $pagename;
   
   // we can use a direct url to the file if authorization is not needed
   if( !$WikiGallery_UseAuthorization ) {
@@ -540,10 +541,11 @@ function WikiGalleryInternalThumb( $path, $size ) {
     }
   }
 
+  $url = MakeLink( $pagename, $pagename, NULL, NULL, "\$LinkUrl" );
   if( $size==0 )
-    return FmtPageName('$PageUrl','{$FullName}') . '?action=thumbnail&image=' . urlencode($path) . ' ';
+    return $url . '?action=thumbnail&image=' . urlencode($path) . ' ';
   else
-    return FmtPageName('$PageUrl','{$FullName}') . '?action=thumbnail&width=' . $size . '&image=' . urlencode($path) . ' ';
+    return $url . '?action=thumbnail&width=' . $size . '&image=' . urlencode($path) . ' ';
 }
 
 function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
