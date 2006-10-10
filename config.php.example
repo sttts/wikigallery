@@ -1,3 +1,2 @@
-$WikiGallery_PicturesBasePath = "/home/domains/1stein.org/http/pictures";
 include_once("$FarmD/cookbook/wikigallery/wikigallery.php");
 $WikiLibDirs[] = new GalleryPageStore('Pics');
