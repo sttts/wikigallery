@@ -30,7 +30,7 @@ SDV($WikiGallery_CacheBasePath, $WikiGallery_CacheWebPath); // the path to the t
 
 SDV($WikiGallery_ImageMagickPath, "/usr/bin/"); // absolute path to the ImageMagick binaries (mogrify, convert, ...)
 SDV($WikiGallery_FindPath, ""); // path to the find command, usually /usr/bin/
-SDV($WikiGallery_PhpThumb, substr($PubDirUrl,0,strlen($PubDirUrl)-strlen(strrchr($PubDirUrl,"/"))) . "/phpThumb.php"  ); // the phpthumb script url
+SDV($WikiGallery_PhpThumb, WikiGalleryLeadingComponents($PubDirUrl) . "/phpThumb.php"  ); // the phpthumb script url
 
 # How the wiki pages look like
 SDV($WikiGallery_NavThumbnailColumns, 5); // odd number
@@ -142,14 +142,12 @@ function pageNameToFileName( $basePath, $pageName ) {
   if( $pageName=="" ) return "";
 
   //echo "Will try to find filename for $pageName<br/>";
-  $lastComponent = strrchr($pageName, $WikiGallery_PathDelimiter);
-  if( $lastComponent==FALSE ) {
+  $lastComponent = WikiGalleryLastComponent( $pageName, $WikiGallery_PathDelimiter );
+  $head = WikiGalleryLeadingComponents( $pageName, $WikiGallery_PathDelimiter );
+  if( !$head ) {
     $path = "";
     $pathslash = "";
-    $lastComponent = $pageName;
   } else {
-    $head = substr( $pageName, 0, strlen($pageName)-strLen($lastComponent) );
-    $lastComponent = substr($lastComponent,1);
     $path = pageNameToFileName( $basePath, $head );
     if( $path==-1 ) return -1;
     $pathslash = "$path/";
@@ -261,17 +259,14 @@ function WikiGalleryNeightbourPicture( $name, $delta, $count=-1 ) {
     return false;
 
   # split pathes into filename and path
-  $slashfilename = strrchr($pagefile,"/");
-  if( $slashfilename==FALSE ) {
-    $filename = $pagefile;
-    $path = "";
+  $filename = WikiGalleryLastComponent( $pagefile );
+  $path = WikiGalleryLeadingComponents( $pagefile );
+  if( !$path ) {
     $slashpath = "";
     $pathslash = "";
   } else {
-    $path = substr($pagefile,0,strlen($pagefile)-strlen($slashfilename));
     $slashpath = "/" . $path;
     $pathslash = $path . "/";
-    $filename = substr($slashfilename,1);
   }
 
   # find position in the album of the current picture
@@ -319,13 +314,10 @@ function WikiGalleryParent( $name ) {
   if( $pagefile==-1 && ! is_dir($WikiGallery_PicturesBasePath . "/" . $pagefile) )
     return false;
 
-  # split pathes into filename and path
-  $slashfilename = strrchr($pagefile,"/");
-  if( $slashfilename==FALSE ) return "";
-  
   # return parent page
-  $path = substr($pagefile,0,strlen($pagefile)-strlen($slashfilename));
-  return fileNameToPageName( $path );
+  $path = WikiGalleryLeadingComponents($pagefile);
+  if( $path ) return fileNameToPageName( $path );
+  return "";
 }
 
 function WikiGalleryPicture( $size, $path, $random=false ) {
@@ -345,6 +337,22 @@ function WikiGalleryPicture( $size, $path, $random=false ) {
   
   // return phpthumb url
   return $WikiGallery_ThumbFunction( $path, $size );
+}
+
+function WikiGalleryLastComponent( $path, $delimiter="/" ) {
+  $slash = strrchr($path,$delimiter);
+  if( $slash )
+    return substr($slash, 1);
+  else
+    return $path;
+}
+	
+function WikiGalleryLeadingComponents( $path, $delimiter="/" ) {
+  $slash = strrchr($path,$delimiter);
+  if( $slash )
+    return substr($path, 0, strlen($path)-strlen($slash));
+  else
+    return "";
 }
 
 class GalleryPageStore extends PageStore {
@@ -484,6 +492,8 @@ class GalleryPageStore extends PageStore {
 	else
 	  $page = ReadPage( "$SiteGroup.GalleryOverviewTemplate" );
 	if( @$page ) {
+	  $title = WikiGalleryLastComponent($pagefile);
+	  $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
 	  $page['galleryalbum'] = $this->galleryslash . $pagefile;
 	  $page['ctime'] = filectime( $filename );
 	  $page['time'] = filemtime( $filename );
@@ -497,11 +507,15 @@ class GalleryPageStore extends PageStore {
 	  $page = ReadPage( "$SiteGroup.GalleryPictureTemplate" );
 	if( @$page ) {
 	  $page['gallerypicture'] = $this->galleryslash . $pagefile;
-	  $slash = strrchr($pagefile,'/');
-	  if( $slash ) 
-	    $album = substr($pagefile, 0, strlen($pagefile)-strlen($slash));
-	  else
-	    $album = "HomePage";
+	  
+	  $pictureWithExt = WikiGalleryLastComponent($pagefile);
+	  $picture = WikiGalleryLeadingComponents($pictureWithExt,".");
+	  $album = WikiGalleryLeadingComponents($pagefile);
+	  if( !$album ) $album = "HomePage";
+	  
+	  $title = PageVar($this->galleryGroup . "." . $album, '$Title') . " - " . $picture;
+	  $page['title'] = $title;
+	  $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
 	  $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . fileNameToPageName( $album );
 	  $page['ctime'] = filectime( $filename );
 	  $page['time'] = filemtime( $filename );

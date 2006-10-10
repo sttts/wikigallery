@@ -1,14 +1,24 @@
-version=pmwiki-2.1.18 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+version=pmwiki-2.1.26 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
 author=schimmi
 csum=
 ctime=1158140878
-host=141.84.9.37
+host=82.135.67.241
 name=Site.GalleryPictureTemplate
-rev=6
-targets=
-text=(:include {$SiteGroup}.GalleryPictureDefault:)%0a
-time=1158142628
+rev=9
+targets=Site.GalleryPictureTemplate
+text=(:include {$SiteGroup}.GalleryPictureDefault:)%0a(:title {$FullName}:)
+time=1160510156
+title=Site.GalleryPictureTemplate
+author:1160510156=schimmi
+diff:1160510156:1160506701:minor=1,2c1%0a%3c (:include {$SiteGroup}.GalleryPictureDefault:)%0a%3c (:title {$FullName}:)%0a\ No newline at end of file%0a---%0a> (:include {$SiteGroup}.GalleryPictureDefault:)%0a\ No newline at end of file%0a
+host:1160510156=82.135.67.241
+author:1160506701=Schimmi
+diff:1160506701:1160506639:=1c1,2%0a%3c (:include {$SiteGroup}.GalleryPictureDefault:)%0a\ No newline at end of file%0a---%0a> (:include {$SiteGroup}.GalleryPictureDefault:)%0a> (:title {$FullName}:)%0a\ No newline at end of file%0a
+host:1160506701=82.135.67.241
+author:1160506639=Schimmi
+diff:1160506639:1158142628:=2d1%0a%3c (:title {$FullName}:)%0a\ No newline at end of file%0a
+host:1160506639=82.135.67.241
 author:1158142628=schimmi
 diff:1158142628:1158142366:=1a2,3%0a> %0a> album: "{$GalleryAlbum}"%0a\ No newline at end of file%0a
 host:1158142628=141.84.9.37
