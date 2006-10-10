@@ -637,15 +637,16 @@ if( !file_exists( $WikiGallery_CleanupTimestamp ) ) {
   // clean up, but not too often
   if( time()-filemtime($WikiGallery_CleanupTimestamp )>$WikiGallery_CleanupInterval ) {
 #    WikiGalleryCleanupCache();
-    register_shutdown_function( 'WikiGalleryCleanupCache' );
+    register_shutdown_function( 'WikiGalleryCleanupCache', getcwd() );
   }
 }
 
-function WikiGalleryCleanupCache() {
+function WikiGalleryCleanupCache( $dir ) {
   global $WikiGallery_CacheBasePath, $WikiGallery_CleanupDelay,
     $WikiGallery_CleanupTimestamp, $WikiGallery_FindPath;
 
   // mark that cleanup was run
+  chdir( $dir ); // work around for php bug. In shutdown functions the path is corrupted
   touch( $WikiGallery_CleanupTimestamp );
 
   // delete old files
