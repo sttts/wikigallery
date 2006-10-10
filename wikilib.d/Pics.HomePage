@@ -1,14 +1,27 @@
-version=pmwiki-2.1.18 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
+version=pmwiki-2.1.26 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
 author=schimmi
 csum=
 ctime=1158220418
-host=212.202.73.176
+host=138.246.7.82
 name=Pics.HomePage
-rev=2
-targets=
-text=!Photos%0a%0a(:pagelist trail=Pics.Albums fmt=#galleryalbums:)%0a
-time=1158220535
+rev=6
+targets=Pics.HomePage
+text=(:title Photos:)%0a(:pagelist fmt=#galleryoverview trail=Index:)%0a%0a(:pagelist fmt=#galleryalbums trail=Albums:)%0a
+time=1160466623
+title=Photos
+author:1160466623=schimmi
+diff:1160466623:1159824286:=2,4c2%0a%3c (:pagelist fmt=#galleryoverview trail=Index:)%0a%3c %0a%3c (:pagelist fmt=#galleryalbums trail=Albums:)%0a---%0a> (:pagelist trail=Pics.Albums fmt=#galleryalbums:)%0a
+host:1160466623=138.246.7.82
+author:1159824286=Schimmi
+diff:1159824286:1159824271:=0a1%0a> %25comment%25 [[!Reise]] [[!Study]]%0a
+host:1159824286=82.135.64.250
+author:1159824271=Schimmi
+diff:1159824271:1158569739:=1d0%0a%3c %25comment%25 [[!Reise]] [[!Study]]%0a
+host:1159824271=82.135.64.250
+author:1158569739=schimmi
+diff:1158569739:1158220535:=1c1,2%0a%3c (:title Photos:)%0a---%0a> !Photos%0a> %0a
+host:1158569739=138.246.7.82
 author:1158220535=schimmi
 diff:1158220535:1158220418:=3c3%0a%3c (:pagelist trail=Pics.Albums fmt=#galleryalbums:)%0a---%0a> (:pagelist trail=Pics.Albums fmt=#GalleryAlbums:)%0a
 host:1158220535=212.202.73.176
