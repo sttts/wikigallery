@@ -497,7 +497,11 @@ class GalleryPageStore extends PageStore {
 	  $page = ReadPage( "$SiteGroup.GalleryPictureTemplate" );
 	if( @$page ) {
 	  $page['gallerypicture'] = $this->galleryslash . $pagefile;
-	  $album = substr($pagefile, 0, strlen($pagefile)-strlen(strrchr($pagefile,'/')));
+	  $slash = strrchr($pagefile,'/');
+	  if( $slash ) 
+	    $album = substr($pagefile, 0, strlen($pagefile)-strlen($slash));
+	  else
+	    $album = "HomePage";
 	  $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . fileNameToPageName( $album );
 	  $page['ctime'] = filectime( $filename );
 	  $page['time'] = filemtime( $filename );
