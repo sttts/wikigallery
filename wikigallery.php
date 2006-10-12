@@ -512,12 +512,15 @@ class GalleryPageStore extends PageStore {
 	  $pictureWithExt = WikiGalleryLastComponent($pagefile);
 	  $picture = WikiGalleryLeadingComponents($pictureWithExt,".");
 	  $album = WikiGalleryLeadingComponents($pagefile);
-	  if( !$album ) $album = "HomePage";
-	  
-	  $title = PageVar($this->galleryGroup . "." . $album, '$Title') . " - " . $picture;
+	  if( $album ) 
+	    $albumPage = fileNameToPageName( $album );
+	  else
+	    $albumPage = "HomePage";
+
+	  $title = PageVar($this->galleryGroup . ".$albumPage", '$Title') . " - " . $picture;
 	  $page['title'] = $title;
 	  $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
-	  $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . fileNameToPageName( $album );
+	  $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . $albumPage;
 	  $page['ctime'] = filectime( $filename );
 	  $page['time'] = filemtime( $filename );
 	  return $page;
