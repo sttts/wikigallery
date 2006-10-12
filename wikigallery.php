@@ -493,6 +493,7 @@ class GalleryPageStore extends PageStore {
 	  $page = ReadPage( "$SiteGroup.GalleryOverviewTemplate" );
 	if( @$page ) {
 	  $title = WikiGalleryLastComponent($pagefile);
+	  $page['title'] = $title;
 	  $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
 	  $page['galleryalbum'] = $this->galleryslash . $pagefile;
 	  $page['ctime'] = filectime( $filename );

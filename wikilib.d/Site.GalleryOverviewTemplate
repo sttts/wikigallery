@@ -1,14 +1,18 @@
-version=pmwiki-2.1.18 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.6) Gecko/20060728 Firefox/1.5.0.6
-author=Schimmi
+version=pmwiki-2.1.26 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
+author=schimmi
 csum=
 ctime=1158165885
-host=141.84.9.37
+host=138.246.7.82
 name=Site.GalleryOverviewTemplate
-rev=2
-targets=
-text=(:include {$SiteGroup}.GalleryOverviewDefault:)
-time=1158165955
+rev=3
+targets=Site.GalleryOverviewTemplate
+text=(:include {$SiteGroup}.GalleryOverviewDefault:)%0a(:title {$FullName}:)
+time=1160646239
+title=Site.GalleryOverviewTemplate
+author:1160646239=schimmi
+diff:1160646239:1158165955:=1,2c1%0a%3c (:include {$SiteGroup}.GalleryOverviewDefault:)%0a%3c (:title {$FullName}:)%0a\ No newline at end of file%0a---%0a> (:include {$SiteGroup}.GalleryOverviewDefault:)%0a\ No newline at end of file%0a
+host:1160646239=138.246.7.82
 author:1158165955=Schimmi
 diff:1158165955:1158165885:=1c1%0a%3c (:include {$SiteGroup}.GalleryOverviewDefault:)%0a\ No newline at end of file%0a---%0a> (:include GalleryOverviewDefault:)%0a\ No newline at end of file%0a
 host:1158165955=141.84.9.37
