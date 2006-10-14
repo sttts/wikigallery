@@ -582,6 +582,13 @@ function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
   return $path . "/" . $size . "." . $ext;
 }
 
+function WikiGalleryMimeType( $file ) {
+  if( preg_match("/.jpe?g$/i", $file) ) $format='image/jpeg'; 
+  else if( preg_match("/.gif$/i", $file) ) $format='image/gif'; 
+  else if( preg_match("/.png$/i", $file) ) $format='image/png'; 
+  else return false;
+}
+
 function WikiGalleryScaleGD( $original, $thumb, $width, $height ) {
   global $WikiGallery_HighQualityResize;
 
@@ -592,11 +599,8 @@ function WikiGalleryScaleGD( $original, $thumb, $width, $height ) {
   if( !$version>=2 ) return;
 
   // get file format
-  $format='';
-  if( preg_match("/.jpg$/i", $original) ) $format='image/jpeg'; else
-  if( preg_match("/.gif$/i", $original) ) $format='image/gif'; else
-  if( preg_match("/.png$/i", $original) ) $format='image/png'; else
-    return;
+  $format=WikiGalleryMimeType( $original );
+  if( !$format ) return;
   
   // get current size
   list($origWidth, $origHeight) = getimagesize($original);
@@ -718,7 +722,7 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
   }
 
   // output picture
-  header( "Content-type: " . mime_content_type( $original ) );
+  header( "Content-type: " . WikiGalleryMimeType( $original ) );
   print file_get_contents( $filename );
   exit;
 }
