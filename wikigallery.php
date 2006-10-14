@@ -42,7 +42,8 @@ SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 
 # Thumbnail generation
 SDV($WikiGallery_ThumbFunction, 'WikiGalleryInternalThumb');  // use internal thumbnail routine. Set to 'WikiGalleryPhpThumb' for phpthumb
-SDV($WikiGallery_HighQualityResize, false); // use better quality (but slower) resize algorithms?
+SDV($WikiGallery_ScaleMethod, "auto"); // either "auto", "imagemagick" or "libgd2"; "auto" means first imagemagick, then libgd2
+SDV($WikiGallery_HighQualityResize, true); // use better quality (but slower) resize algorithms?
 SDV($WikiGallery_UseAuthorization, true); // try to authorize for the page the picture/thumbnail is belonging to
 
 # Clean up of thumbnail cache
@@ -581,11 +582,99 @@ function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
   return $path . "/" . $size . "." . $ext;
 }
 
+function WikiGalleryScaleGD( $original, $thumb, $width, $height ) {
+  global $WikiGallery_HighQualityResize;
+
+  // libgd2 installed?
+  $info = @gd_info();
+  if( !$info ) return;
+  $version = ereg_replace('[[:alpha:][:space:]()]+', '', $info['GD Version']);
+  if( !$version>=2 ) return;
+
+  // get file format
+  $format='';
+  if( preg_match("/.jpg$/i", $original) ) $format='image/jpeg'; else
+  if( preg_match("/.gif$/i", $original) ) $format='image/gif'; else
+  if( preg_match("/.png$/i", $original) ) $format='image/png'; else
+    return;
+  
+  // get current size
+  list($origWidth, $origHeight) = getimagesize($original);
+
+  // compute new height
+  if( $width==0 && $height==0 ) { $width = $origWidth; $height = $origHeight; }
+  else if( $width==0 ) $width = $origWidth*$height/$origHeight;
+  else if( $height==0 ) $height = $origHeight*$width/$origWidth;
+
+  // load image
+  switch( $format ) {
+  case 'image/jpeg':
+    $source = imagecreatefromjpeg($original);
+    break;
+  case 'image/gif':
+    $source = imagecreatefromgif($original);
+    break;
+  case 'image/png':
+    $source = imagecreatefrompng($original);
+    break;
+  }
+
+  if( $source ) {
+    // scale
+    $dest = imagecreatetruecolor( $width,$height );
+    imagealphablending( $dest, false );
+    if( $WikiGallery_HighQualityResize )
+      imagecopyresampled($dest, $source, 0, 0, 0, 0, $width, $height, $origWidth, $origHeight);
+    else
+      imagecopyresized($dest, $source, 0, 0, 0, 0, $width, $height, $origWidth, $origHeight);
+
+    // store image
+    @imagejpeg($dest, $thumb);
+  }
+}
+
+function WikiGalleryScaleIM( $original, $thumb, $width, $height ) {
+  global $WikiGallery_ImageMagickPath, $WikiGallery_HighQualityResize;
+
+  // get size
+  if( $width==0 ) $size="x$height";
+  elseif( $height==0 ) $size=$width."x";
+  else $size=$width."x".$height;
+ 
+  // call imagemagick's convert to scale
+  if( $WikiGallery_HighQualityResize )
+    $command = $WikiGallery_ImageMagickPath . "convert -size $size -resize $size +profile \"*\" " . 
+      escapeshellarg($original) . " " . escapeshellarg($thumb);
+  else
+    $command = $WikiGallery_ImageMagickPath . "convert -scale $size " . 
+      escapeshellarg($original) . " " . escapeshellarg($thumb);
+  @system( $command );
+}
+
+function WikiGalleryScale( $original, $thumb, $width, $height ) {
+  global $WikiGallery_ScaleMethod;
+  if( !is_file( $thumb ) && is_file( $original ) ) {
+    // which method to use?
+    $im = false;
+    $gd = false;
+    if( $WikiGallery_ScaleMethod=="auto" ) { $im = true; $gd = true; }
+    else if( $WikiGallery_ScaleMethod=="imagemagick" ) { $im = true; }
+    else if( $WikiGallery_ScaleMethod=="libgd2" ) { $gd = true; }
+    
+    // try libgd2
+    if( $im && !is_file( $thumb ) ) WikiGalleryScaleIM( $original, $thumb, $width, $height );
+    if( $gd && !is_file( $thumb ) ) WikiGalleryScaleGD( $original, $thumb, $width, $height );
+    
+    // did one work?
+    if( !is_file( $thumb ) ) {
+      Abort("Unable to generate thumbnail, check whether imagemagick is installed or your PHP support libgd2.<br>");
+    }
+  }
+}
+
 $HandleActions["thumbnail"] = 'WikiGalleryThumbnail';
 function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
-  global $WikiGallery_PicturesBasePath, $WikiGallery_ImageMagickPath,
-    $WikiGallery_HighQualityResize, $WikiGallery_CacheBasePath,
-    $WikiGallery_UseAuthorization;
+  global $WikiGallery_PicturesBasePath, $WikiGallery_CacheBasePath, $WikiGallery_UseAuthorization;
 
   // get filename
   if( !isset( $_GET["image"] ) ) Abort('no image given');
@@ -616,25 +705,12 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
     // resize
     $filename = $WikiGallery_CacheBasePath . "/" . WikiGalleryInternalThumbCacheName( $path, $width, $height );
     if( !is_file( $filename ) ) {
-      // get size
-      if( $width==0 ) $size="x".intval($height); 
-      elseif( $height==0 ) $size=intval($width);
-      else $size=intval($width)."x".intval($height);
-
       // make directory
       $dir = dirname($filename); 
       mkdirp($dir);
 
       // call ImageMagick to scale
-      if( $WikiGallery_HighQualityResize )
-	$command = $WikiGallery_ImageMagickPath . "convert -size $size -resize $size +profile \"*\" " . 
-	  escapeshellarg($original) . " " . escapeshellarg($filename);
-      else
-	$command = $WikiGallery_ImageMagickPath . "convert -scale $size " . 
-	  escapeshellarg($original) . " " . escapeshellarg($filename);
-      if( @system($command)<0 ){
-	Abort("Unable to generate thumbnail, check your impath variable and make sure imagemagick is installed.<br>");
-      }
+      WikiGalleryScale( $original, $filename, $width, $height );
     } else {
       // touch it so that it is not purged during cleanup
       touch( $filename );      
@@ -670,7 +746,6 @@ function WikiGalleryCleanupCache( $dir ) {
   // delete old files
   $command = $WikiGallery_FindPath . "find " . escapeshellarg($WikiGallery_CacheBasePath) . 
     " -type f -mtime +$WikiGallery_CleanupDelay -exec rm -f {} \\;";  
-#  echo "kkkkkkkkkkkkkkkkkkkkkkkkkkkk $command";
   if( @system( $command )<0 ) {
     Abort( "Error during cleanup of old thumbnails" );
   }
