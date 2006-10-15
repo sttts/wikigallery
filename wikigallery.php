@@ -583,10 +583,10 @@ function WikiGalleryInternalThumbCacheName( $path, $width=0, $height=0 ) {
 }
 
 function WikiGalleryMimeType( $file ) {
-  if( preg_match("/.jpe?g$/i", $file) ) $format='image/jpeg'; 
-  else if( preg_match("/.gif$/i", $file) ) $format='image/gif'; 
-  else if( preg_match("/.png$/i", $file) ) $format='image/png'; 
-  else return false;
+  if( preg_match("/.jpe?g$/i", $file) ) return 'image/jpeg'; 
+  else if( preg_match("/.gif$/i", $file) ) return 'image/gif'; 
+  else if( preg_match("/.png$/i", $file) ) return 'image/png'; 
+  else return false;  
 }
 
 function WikiGalleryScaleGD( $original, $thumb, $width, $height ) {
