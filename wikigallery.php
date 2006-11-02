@@ -723,6 +723,10 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
 
   // output picture
   header( "Content-type: " . WikiGalleryMimeType( $original ) );
+  header("Pragma: ");
+  header("Expires: " . intval(time() + 3600) );
+  header("Cache-Control: max-age=3600, must-revalidate");
+
   print file_get_contents( $filename );
   exit;
 }
