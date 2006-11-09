@@ -42,7 +42,9 @@ function WikiGalleryInternalThumb( $path, $size ) {
     else {
       // give direct url to the cache file
       $thumbnail = WikiGalleryInternalThumbCacheName( $path, $size );
-      if( is_file( $WikiGallery_CacheBasePath . "/" . $thumbnail ) ) {
+      $thumbname = $WikiGallery_CacheBasePath . "/" . $thumbnail;
+      $originalname = $WikiGallery_PictureBasePath . "/" . $path;
+      if( is_file($thumbname) && filemtime($thumbname)>=filemtime($originalname) ) {
 	// touch it so that it is not purged during cleanup
 	touch( $WikiGallery_CacheBasePath . "/" . $thumbnail );
 	
@@ -192,10 +194,13 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
   } else {
     // resize
     $filename = $WikiGallery_CacheBasePath . "/" . WikiGalleryInternalThumbCacheName( $path, $width, $height );
-    if( !is_file( $filename ) ) {
+    if( (!is_file($filename)) || (filemtime($filename)<filemtime($original)) ) {
       // make directory
       $dir = dirname($filename); 
       mkdirp($dir);
+
+      // if it already there, it must be updated. So remove it to avoid trouble overwriting it
+      unlink($filename);
 
       // call ImageMagick to scale
       WikiGalleryScale( $original, $filename, $width, $height );
