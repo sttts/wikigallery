@@ -194,29 +194,40 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
   } else {
     // resize
     $filename = $WikiGallery_CacheBasePath . "/" . WikiGalleryInternalThumbCacheName( $path, $width, $height );
-    if( (!is_file($filename)) || (filemtime($filename)<filemtime($original)) ) {
-      // make directory
-      $dir = dirname($filename); 
-      mkdirp($dir);
-
-      // if it already there, it must be updated. So remove it to avoid trouble overwriting it
-      unlink($filename);
+    $exists = is_file($filename);
+    if( !$exists || (filemtime($filename)<filemtime($original)) ) {
+      if( $exists ) 
+	// if it already there, it must be updated. So remove it to avoid trouble overwriting it
+	unlink($filename);
+      else {
+	// make directory
+	$dir = dirname($filename); 
+	mkdirp($dir);
+      }
 
       // call ImageMagick to scale
       WikiGalleryScale( $original, $filename, $width, $height );
     } else {
       // touch it so that it is not purged during cleanup
-      touch( $filename );      
+      touch( $filename );
     }
   }
 
-  // output picture
-  header( "Content-type: " . WikiGalleryMimeType( $original ) );
-  header("Pragma: ");
-  header("Expires: " . intval(time() + 3600) );
-  header("Cache-Control: max-age=3600, must-revalidate");
-
-  print file_get_contents( $filename );
+  // Checking if the client is validating his cache and if it is current.
+#  if( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
+#      strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])==filemtime($original) ) {
+#    // Client's cache IS current, so we just respond '304 Not Modified'.
+#    header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($original)).' GMT', true, 304);
+#  } else {
+#    // Image not cached or cache outdated, we respond '200 OK' and output the image.
+#    header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($original)).' GMT', true, 200);
+    header('Content-Length: '.filesize($filename));
+    header("Content-type: " . WikiGalleryMimeType($original) );
+    header("Pragma: ");
+    header("Expires: " . intval(time() + 3600) );
+    header("Cache-Control: max-age=3600, must-revalidate");
+    print file_get_contents( $filename );
+#  }
   exit;
 }
 
