@@ -1,14 +1,17 @@
-version=pmwiki-2.1.26 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
+version=pmwiki-2.2.0-beta16 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1) Gecko/20061010 Firefox/2.0
 author=schimmi
 csum=
 ctime=1158569671
-host=138.246.7.82
+host=82.135.89.243
 name=Pics.GroupHeader
-rev=6
-targets=
-text=!{$Title}%0a%0a
-time=1158570115
+rev=7
+targets=Pics.GroupHeader
+text=!{*$Title}%0a%0a
+time=1163259300
+author:1163259300=schimmi
+diff:1163259300:1158570115:=1,2c1,2%0a%3c !{*$Title}%0a%3c %0a---%0a> !{$Title}%0a> %0a
+host:1163259300=82.135.89.243
 author:1158570115=schimmi
 diff:1158570115:1158569896:=2c2,18%0a%3c %0a---%0a> (:if ! equal "{$GalleryPicture}" "":)%0a> %25center%25 (:pagelist fmt=#gallerynavigation trail={$FullName}Navigation:)%0a> %0a> %25center%25 \%0a> (:if ! equal "{$GalleryPrev}" "":)[[{$GalleryPrev}|%3c-]] (:ifend:) \%0a> [[{$GalleryOverview}|Overview]] \%0a> (:if ! equal "{$GalleryNext}" "":) [[{$GalleryNext}|->]](:ifend:)%0a> %0a> a%0a> (:if equal "{$GalleryNext}" "":)%0a> %25center%25 (:gallerypicture {$GallerySize} {$GalleryPicture}:)%0a> b%0a> (:if ! equal "{$GalleryNext}" "":)%0a> %25center%25 [[{$GalleryNext}|(:gallerypicture {$GallerySize} {$GalleryPicture}:)]]%0a> (:ifend:)%0a> %0a> (:ifend:)%0a
 host:1158570115=138.246.7.82

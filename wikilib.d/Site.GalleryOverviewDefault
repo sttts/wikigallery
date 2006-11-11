@@ -1,14 +1,17 @@
-version=pmwiki-2.1.26 ordered=1 urlencoded=1
-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7
-author=Schimmi
+version=pmwiki-2.2.0-beta16 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1) Gecko/20061010 Firefox/2.0
+author=schimmi
 csum=
 ctime=1158165865
-host=82.135.67.140
+host=82.135.89.243
 name=Site.GalleryOverviewDefault
-rev=16
-targets=Site.Site
-text=%25center%25 [[{$Group}/{$GalleryParent}|$[Go up]]]%0a%0a(:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a%0a(:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
-time=1159993205
+rev=17
+targets=Site.GalleryOverviewDefault,Site.Site
+text=%25center%25 [[{*$Group}/{*$GalleryParent}|$[Go up]]]%0a%0a(:pagelist fmt=#galleryoverview trail={*$FullName}Index:)%0a%0a(:pagelist fmt=#galleryalbums trail={*$FullName}Albums:)%0a%0a%25comment%25 WikiGallery by Stefan Schimanski at http://1stein.org%0a
+time=1163259422
+author:1163259422=schimmi
+diff:1163259422:1159993205:=1,6c1,6%0a%3c %25center%25 [[{*$Group}/{*$GalleryParent}|$[Go up]]]%0a%3c %0a%3c (:pagelist fmt=#galleryoverview trail={*$FullName}Index:)%0a%3c %0a%3c (:pagelist fmt=#galleryalbums trail={*$FullName}Albums:)%0a%3c %0a---%0a> %25center%25 [[{$Group}/{$GalleryParent}|$[Go up]]]%0a> %0a> (:pagelist fmt=#galleryoverview trail={$FullName}Index:)%0a> %0a> (:pagelist fmt=#galleryalbums trail={$FullName}Albums:)%0a> %0a
+host:1163259422=82.135.89.243
 author:1159993205=Schimmi
 diff:1159993205:1159993167:=1,2c1,2%0a%3c %25center%25 [[{$Group}/{$GalleryParent}|$[Go up]]]%0a%3c %0a---%0a> %25center%25 [[{$Group}/{$GalleryParent}|$[Go back to] {$GalleryParent}]]%0a> %0a
 host:1159993205=82.135.67.140

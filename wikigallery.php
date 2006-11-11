@@ -73,6 +73,11 @@ $FmtPV['$GalleryNextNext'] = 'WikiGalleryPageStore("$group")->neightbourPicture(
 $FmtPV['$GalleryPrev'] = 'WikiGalleryPageStore("$group")->neightbourPicture("$name",-1)';
 $FmtPV['$GalleryPrevPrev'] = 'WikiGalleryPageStore("$group")->neightbourPicture("$name",-2)';
 
+# make it work with <2.2 versions
+if ( $VersionNum<2001900) {
+  Markup( '{*$var}', '<{$var}', '/\\{\\*\\$/e', "'{'.\$pagename.'$'" );
+}
+
 #################################################################################
 
 // group register for the pagestores
