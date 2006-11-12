@@ -1,0 +1,17 @@
+version=pmwiki-2.2.0-beta16 ordered=1 urlencoded=1
+agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1) Gecko/20061010 Firefox/2.0
+author=schimmi
+csum=
+ctime=1163348295
+host=82.135.88.220
+name=Site.GalleryHomePageTemplate
+rev=2
+targets=Site.GalleryHomePageTemplate
+text=(:include Site/GalleryHomePageDefault:)%0a
+time=1163348418
+author:1163348418=schimmi
+diff:1163348418:1163348295:=1c1,4%0a%3c (:include Site/GalleryHomePageDefault:)%0a---%0a> (:title $[Photos]:)%0a> (:pagelist fmt=#galleryoverview trail={*$Group}/Index:)%0a> %0a> (:pagelist fmt=#galleryalbums trail={*$Group}/Albums:)%0a
+host:1163348418=82.135.88.220
+author:1163348295=schimmi
+diff:1163348295:1163348295:=1,4d0%0a%3c (:title $[Photos]:)%0a%3c (:pagelist fmt=#galleryoverview trail={*$Group}/Index:)%0a%3c %0a%3c (:pagelist fmt=#galleryalbums trail={*$Group}/Albums:)%0a
+host:1163348295=82.135.88.220

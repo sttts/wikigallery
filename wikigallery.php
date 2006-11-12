@@ -58,8 +58,14 @@ SDV($WikiGallery_DefaultSize, 640);
 ################################################################################
 
 // The markup:
-Markup('(:gallerypicture width picture:)','><|',"/\\(:gallerypicture\\s([0-9]+)\\s([^:]*):\\)/e",'WikiGalleryDefaultPageStore()->picture(\'$1\',\'$2\')');
-Markup('(:gallerypicturerandom width album:)','><|',"/\\(:gallerypicturerandom\\s([0-9]+)\\s([^:]*):\\)/e",'WikiGalleryDefaultPageStore()->picture(\'$1\',\'$2\',true)');
+Markup('(:gallerypicture group? width picture:)',
+       '><|',
+       "/\\(:gallerypicture(\\s([^0-9][^\\s]+))?\\s([0-9]+)\\s([^:]*):\\)/e",
+       'WikiGalleryPageStore(\'$2\')->picture(\'$3\',\'$4\')');
+Markup('(:gallerypicturerandom group? width album:)',
+       '><|',
+       "/\\(:gallerypicturerandom(\\s([^0-9][^\\s]+))?\\s([0-9]+)\\s([^:]*):\\)/e",
+       'WikiGalleryPageStore(\'$2\')->picture(\'$3\',\'$4\',true)');
 
 // Page variables
 $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] : ""';
@@ -84,7 +90,8 @@ $WikiGallery_Register = array();
 $WikiGallery_DefaultGroup = false;
 
 function WikiGalleryPageStore( $group ) {
-  global $WikiGallery_Register;
+  global $WikiGallery_Register, $pagename;
+  if( !$group ) $group = PageVar($pagename,'$Group');
   if( @$WikiGallery_Register[$group] )
     return $WikiGallery_Register[$group];
   else
@@ -185,11 +192,11 @@ class GalleryPageStore extends PageStore {
 
   function GalleryPageStore( $galleryGroup, $provider=false ) {
     global $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath, 
-      $WikiGallery_CacheBasePath, $WikiGallery_CacheWebPath, 
-      $WikiGallery_Register, $WikiGallery_DefaultGroup,
-      $WikiGallery_ScaleMethod;
+      $WikiGallery_Register, $WikiGallery_DefaultGroup;
+
     $WikiGallery_Register[$galleryGroup] = $this;
     $WikiGallery_DefaultGroup = $galleryGroup;
+
     $this->PageStore( $WikiGallery_PicturesBasePath );
     $this->galleryGroup = $galleryGroup;
     if( $provider ) 
@@ -198,15 +205,7 @@ class GalleryPageStore extends PageStore {
       $this->provider = 
 	new GalleryDirectoryProvider( $galleryGroup, 
 				      $WikiGallery_PicturesBasePath, 
-				      $WikiGallery_PicturesWebPath,
-				      new InternalThumbProvider( $galleryGroup, 
-								 $WikiGallery_CacheBasePath, 
-								 $WikiGallery_CacheWebPath, 
-								 $WikiGallery_PicturesBasePath, 
-								 $WikiGallery_PicturesWebPath,
-								 $WikiGallery_ScaleMethod 
-								 )
-				      );
+				      $WikiGallery_PicturesWebPath );	
   }
 
   function pagefile($name) {
@@ -220,6 +219,9 @@ class GalleryPageStore extends PageStore {
 
     // get page name
     $name = PageVar($pagename, '$Name');    
+
+    // HomePage?
+    if( $name=="HomePage" ) return true;
 
     // trail index, album or navigation page?
     if( preg_match( '/^(.*)(Index|Albums|Navigation)$/', $name, $matches ) ) {
@@ -243,6 +245,13 @@ class GalleryPageStore extends PageStore {
 
     // get page name
     $name = PageVar($pagename, '$Name');
+
+    // Homepage?
+    if( $name=="HomePage" ) {
+      $page = ReadPage( 'Site.GalleryHomePageTemplate' );
+      $page['name'] = $pagename;
+      return $page;
+    }
 
     // Trail index page?
     if( preg_match( '/^(.*)Index$/', $name, $matches ) ) {

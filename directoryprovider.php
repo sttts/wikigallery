@@ -27,12 +27,25 @@ class GalleryDirectoryProvider extends GalleryProvider {
   var $directoryBasePath;
   var $thumbProvider;
 
-  function GalleryDirectoryProvider( $group, $basePath, $webPath, $thumbProvider ) {
+  function GalleryDirectoryProvider( $group, $basePath, $webPath, $thumbProvider=false ) {
+    global $WikiGallery_CacheBasePath, $WikiGallery_CacheWebPath, 
+      $WikiGallery_ScaleMethod;
+				
     $this->GalleryProvider( $group );
 
     $this->directoryBasePath = $basePath;
     $this->directoryWebPath = $webPath;
-    $this->thumbProvider = $thumbProvider;
+    if( $thumbProvider )
+      $this->thumbProvider = $thumbProvider;
+    else
+      $this->thumbProvider = 
+	new InternalThumbProvider( $group, 
+				   $WikiGallery_CacheBasePath, 
+				   $WikiGallery_CacheWebPath, 
+				   $basePath,
+				   $webPath,
+				   $WikiGallery_ScaleMethod 
+				   );
   }
 
   function pageNameToFileNameImpl( $basePath, $pageName ) {

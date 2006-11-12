@@ -155,9 +155,9 @@ class InternalThumbProvider extends ThumbProvider {
     
     $url = MakeLink( $pagename, $pagename, NULL, NULL, "\$LinkUrl" );
     if( $size==0 )
-      return $url . '?action=thumbnail&image=' . urlencode($path) . ' ';
+      return $url . '?action=thumbnail&group=' . urlencode($this->group) . '&image=' . urlencode($path) . ' ';
     else
-      return $url . '?action=thumbnail&width=' . $size . '&image=' . urlencode($path) . ' ';
+      return $url . '?action=thumbnail&width=' . $size . '&group=' . urlencode($this->group) . '&image=' . urlencode($path) . ' ';
   }
   
   function cacheFileName( $path, $width=0, $height=0 ) {
