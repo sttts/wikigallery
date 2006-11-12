@@ -221,7 +221,7 @@ class GalleryPageStore extends PageStore {
     $name = PageVar($pagename, '$Name');    
 
     // HomePage?
-    if( $name=="HomePage" ) return true;
+    if( $name=="HomePage" || $name=="GroupHeader" ) return true;
 
     // trail index, album or navigation page?
     if( preg_match( '/^(.*)(Index|Albums|Navigation)$/', $name, $matches ) ) {
@@ -249,6 +249,13 @@ class GalleryPageStore extends PageStore {
     // Homepage?
     if( $name=="HomePage" ) {
       $page = ReadPage( 'Site.GalleryHomePageTemplate' );
+      $page['name'] = $pagename;
+      return $page;
+    }
+
+    // GroupHeader?
+    if( $name=="GroupHeader" ) {
+      $page = ReadPage( 'Site.GalleryGroupHeader' );
       $page['name'] = $pagename;
       return $page;
     }
