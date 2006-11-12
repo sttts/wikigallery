@@ -43,7 +43,6 @@ SDV($WikiGallery_AlbumsSortBackwards, TRUE );
 SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 
 // Thumbnail generation
-SDV($WikiGallery_ThumbFunction, 'WikiGalleryInternalThumb');  // use internal thumbnail routine. Set to 'WikiGalleryPhpThumb' for phpthumb
 SDV($WikiGallery_ScaleMethod, "auto"); // either "auto", "imagemagick" or "libgd2"; "auto" means first imagemagick, then libgd2
 SDV($WikiGallery_HighQualityResize, true); // use better quality (but slower) resize algorithms?
 SDV($WikiGallery_UseAuthorization, true); // try to authorize for the page the picture/thumbnail is belonging to
@@ -140,27 +139,38 @@ function fileNameToPageName( $filename ) {
 }
 
 class GalleryProvider {
+  var $group;
+
+  function GalleryProvider( $group ) {
+    $this->group = $group;
+  }
+  // map a pagename back to a filename (could be slow, i.e. iterating over all files)
   function pageNameToFileName( $pageName ) {
     return false;
   }
 
+  // list the filenames for an album
   function getFilenames( $path, $albums=false ) {
     return false;
   }
 
+  // return if it exists and is an album
   function isAlbum( $path ) {
     return false;
   }
 
+  // return if it exists and is a picture
   function isPicture( $path ) {
     return false;
   }
 
+  // return the mtime of a picture
   function pictureTime( $path ) {
     global $Now;
     return $Now;
   }
 
+  // return the url to show a thumbnail of the given size
   function thumb( $path, $size ) {
     return false;
   }
@@ -174,7 +184,10 @@ class GalleryPageStore extends PageStore {
   var $provider;
 
   function GalleryPageStore( $galleryGroup, $provider=false ) {
-    global $WikiGallery_PicturesBasePath, $WikiGallery_Register, $WikiGallery_DefaultGroup, $WikiGallery_PicturesWebPath;
+    global $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath, 
+      $WikiGallery_CacheBasePath, $WikiGallery_CacheWebPath, 
+      $WikiGallery_Register, $WikiGallery_DefaultGroup,
+      $WikiGallery_ScaleMethod;
     $WikiGallery_Register[$galleryGroup] = $this;
     $WikiGallery_DefaultGroup = $galleryGroup;
     $this->PageStore( $WikiGallery_PicturesBasePath );
@@ -182,7 +195,18 @@ class GalleryPageStore extends PageStore {
     if( $provider ) 
       $this->provider = $provider; 
     else
-      $this->provider = new GalleryDirectoryProvider( $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath );
+      $this->provider = 
+	new GalleryDirectoryProvider( $galleryGroup, 
+				      $WikiGallery_PicturesBasePath, 
+				      $WikiGallery_PicturesWebPath,
+				      new InternalThumbProvider( $galleryGroup, 
+								 $WikiGallery_CacheBasePath, 
+								 $WikiGallery_CacheWebPath, 
+								 $WikiGallery_PicturesBasePath, 
+								 $WikiGallery_PicturesWebPath,
+								 $WikiGallery_ScaleMethod 
+								 )
+				      );
   }
 
   function pagefile($name) {

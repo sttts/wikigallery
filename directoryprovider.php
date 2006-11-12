@@ -25,10 +25,14 @@ require_once( "thumb.php" );
 
 class GalleryDirectoryProvider extends GalleryProvider {
   var $directoryBasePath;
+  var $thumbProvider;
 
-  function GalleryDirectoryProvider( $basePath, $webPath ) { 
+  function GalleryDirectoryProvider( $group, $basePath, $webPath, $thumbProvider ) {
+    $this->GalleryProvider( $group );
+
     $this->directoryBasePath = $basePath;
     $this->directoryWebPath = $webPath;
+    $this->thumbProvider = $thumbProvider;
   }
 
   function pageNameToFileNameImpl( $basePath, $pageName ) {
@@ -158,7 +162,6 @@ class GalleryDirectoryProvider extends GalleryProvider {
   }
 
   function thumb( $path, $size ) {
-    global $WikiGallery_ThumbFunction;
-    return $WikiGallery_ThumbFunction( $path, $size );
+    return $this->thumbProvider->thumbUrl( $path, $size );
   }
 }
