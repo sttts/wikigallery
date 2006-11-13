@@ -78,14 +78,23 @@ $FmtPV['$GalleryAlbum'] = '$page["galleryalbum"] ? $page["galleryalbum"] : ""';
 $FmtPV['$GalleryOverview'] = '$page["galleryoverview"] ? $page["galleryoverview"] : ""';
 $FmtPV['$GallerySize'] = '$GLOBALS["WikiGallery_Size"]';
 $FmtPV['$GalleryParent'] = 'WikiGalleryParent($group,$name)';
-$FmtPV['$GalleryNext'] = 'WikiGalleryNeighbourPicture("$group","$name",1)';
-$FmtPV['$GalleryNextNext'] = 'WikiGalleryNeighbourPicture("$group","$name",2)';
-$FmtPV['$GalleryPrev'] = 'WikiGalleryNeighbourPicture("$group","$name",-1)';
-$FmtPV['$GalleryPrevPrev'] = 'WikiGalleryNeighbourPicture("$group","$name",-2)';
+$FmtPV['$GalleryNext'] = 'WikiGalleryNeighbourPage("$group","$name",1)';
+$FmtPV['$GalleryNextNext'] = 'WikiGalleryNeighbourPage("$group","$name",2)';
+$FmtPV['$GalleryPrev'] = 'WikiGalleryNeighbourPage("$group","$name",-1)';
+$FmtPV['$GalleryPrevPrev'] = 'WikiGalleryNeighbourPage("$group","$name",-2)';
+$FmtPV['$GalleryNextPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",1)';
+$FmtPV['$GalleryNextNextPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",2)';
+$FmtPV['$GalleryPrevPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",-1)';
+$FmtPV['$GalleryPrevPrevPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",-2)';
 
 function WikiGalleryParent( $group, $name ) {
   $pagestore =& WikiGalleryPageStore( $group );
   return $pagestore->parent( $name );
+}
+
+function WikiGalleryNeighbourPage( $group, $name, $dist ) {
+  $pagestore =& WikiGalleryPageStore( $group );
+  return $pagestore->neighbourPicturePage( $name, $dist );
 }
 
 function WikiGalleryNeighbourPicture( $group, $name, $dist ) {
@@ -342,7 +351,7 @@ class GalleryPageStore extends PageStore {
       $name = $matches[1];
 
       // get neighbour pictures
-      $neighbours = $this->neighbourPicture( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
+      $neighbours = $this->neighbourPicturePage( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
 
       // create trail page
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
@@ -416,6 +425,22 @@ class GalleryPageStore extends PageStore {
     return "";
   }
 
+  function neighbourPicturePage( $name, $delta, $count=-1 ) {
+    $pics = $this->neighbourPicture( $name, $delta, $count );
+    if( is_array( $pics ) ) {
+      $ret = array();
+      foreach( $pics as $pic ) {
+	$ret[] = fileNameToPageName($pic);
+      }
+      return $ret;
+    } else {
+      if( $pics=="" )
+	return "";
+      else
+	return fileNameToPageName($pics);
+    }
+  }
+
   function neighbourPicture( $name, $delta, $count=-1 ) {
     // is it a file?
     $pagefile = $this->provider->pageNameToFileName( $name );
@@ -454,7 +479,7 @@ class GalleryPageStore extends PageStore {
     if( $count==-1 ) {
       $i = $thisIndex+$delta;
       if( $i>=0 && $i<$picturesNum )
-	return fileNameToPageName($pathslash . $indexed[$i]);
+	return $pathslash . $indexed[$i];
       else
 	return "";
     } else {
@@ -462,7 +487,7 @@ class GalleryPageStore extends PageStore {
       $ret = array();
 
       while( $i<$picturesNum && $i<$thisIndex+$delta+$count ) {
-	$ret[] = fileNameToPageName($pathslash . $indexed[$i]);
+	$ret[] = $pathslash . $indexed[$i];
 	$i++;
       }
       

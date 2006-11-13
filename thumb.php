@@ -154,7 +154,8 @@ class InternalThumbProvider extends ThumbProvider {
       }
     }
     
-    $url = MakeLink( $pagename, $pagename, NULL, NULL, "\$LinkUrl" );
+    $picpage = $this->group . "." . fileNameToPageName($path);
+    $url = MakeLink( $picpage, $picpage, NULL, NULL, "\$LinkUrl" );
     if( $size==0 )
       return $url . '?action=thumbnail&group=' . urlencode($this->group) . '&image=' . urlencode($path) . ' ';
     else
