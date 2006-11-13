@@ -352,11 +352,13 @@ class GalleryPageStore extends PageStore {
 
       // get neighbour pictures
       $neighbours = $this->neighbourPicturePage( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
-
-      // create trail page
+      
+	// create trail page
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
-      foreach( $neighbours as $pic ) {
-	$page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . $pic . "]]\n";
+      if( $neighbours ) {
+	foreach( $neighbours as $pic ) {
+	  $page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . $pic . "]]\n";
+	}
       }
 
       return $page;
@@ -427,7 +429,9 @@ class GalleryPageStore extends PageStore {
 
   function neighbourPicturePage( $name, $delta, $count=-1 ) {
     $pics = $this->neighbourPicture( $name, $delta, $count );
-    if( is_array( $pics ) ) {
+    if( !$pics ) return false;
+
+    if( $count!=-1 ) {
       $ret = array();
       foreach( $pics as $pic ) {
 	$ret[] = fileNameToPageName($pic);
