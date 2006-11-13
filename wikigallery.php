@@ -23,7 +23,7 @@
 
 require_once( "tools.php" );
 
-$RecipeInfo['WikiGallery']['Version'] = '$Id$';
+$RecipeInfo['WikiGallery']['Version'] = '$Rev$';
 
 // Paths
 SDV($WikiGallery_PicturesWebPath, "pictures/"); // the path to the galleries (relative to the host url http://foo.com/)
