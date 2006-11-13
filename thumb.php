@@ -163,13 +163,19 @@ class InternalThumbProvider extends ThumbProvider {
   }
   
   function cacheFileName( $path, $width=0, $height=0 ) {
+    global $WikiGallery_UseFlatCache;
+
     if( $width!=0 || $height!=0 )
       $size=intval($width)."x".intval($height);
     else
       $size = "original";
     
     $ext = substr( strrchr( $path, "." ), 1 );
-    return $path . "/" . $size . "." . $ext;
+    $name = $path . "/" . $size . "." . $ext;
+    if( $WikiGallery_UseFlatCache )
+      return preg_replace( "/\\//", "-", $name );
+    else
+      return $name;
   }
   
   function scaleGD( $original, $thumb, $width, $height ) {

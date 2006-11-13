@@ -46,6 +46,9 @@ SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 SDV($WikiGallery_ScaleMethod, "auto"); // either "auto", "imagemagick" or "libgd2"; "auto" means first imagemagick, then libgd2
 SDV($WikiGallery_HighQualityResize, true); // use better quality (but slower) resize algorithms?
 SDV($WikiGallery_UseAuthorization, true); // try to authorize for the page the picture/thumbnail is belonging to
+SDV($WikiGallery_UseFlatCache, true); // use flat cache filenames, because it's more compatible. 
+                                      // If you have tons of pictures setting this to false could speed up 
+                                      // the gallery because then you don't get 1000s of cache files in one directory
 
 // Clean up of thumbnail cache
 SDV($WikiGallery_CleanupDelay, 7); // if nobody accessed a thumbnail for a week, purge it
