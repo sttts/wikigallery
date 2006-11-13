@@ -61,22 +61,37 @@ SDV($WikiGallery_DefaultSize, 640);
 Markup('(:gallerypicture group? width picture:)',
        '><|',
        "/\\(:gallerypicture(\\s([^0-9][^\\s]+))?\\s([0-9]+)\\s([^:]*):\\)/e",
-       'WikiGalleryPageStore(\'$2\')->picture(\'$3\',\'$4\')');
+       'WikiGalleryPicture( \'$2\', \'$3\',\'$4\')');
 Markup('(:gallerypicturerandom group? width album:)',
        '><|',
        "/\\(:gallerypicturerandom(\\s([^0-9][^\\s]+))?\\s([0-9]+)\\s([^:]*):\\)/e",
-       'WikiGalleryPageStore(\'$2\')->picture(\'$3\',\'$4\',true)');
+       'WikiGalleryPicture( \'$2\', \'$3\',\'$4\', true)');
+
+function WikiGalleryPicture( $group, $width, $path, $random=false ) {
+  $pagestore =& WikiGalleryPageStore( $group );
+  return $pagestore->picture( $width, $path, $random );
+}
 
 // Page variables
 $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] : ""';
 $FmtPV['$GalleryAlbum'] = '$page["galleryalbum"] ? $page["galleryalbum"] : ""';
 $FmtPV['$GalleryOverview'] = '$page["galleryoverview"] ? $page["galleryoverview"] : ""';
 $FmtPV['$GallerySize'] = '$GLOBALS["WikiGallery_Size"]';
-$FmtPV['$GalleryParent'] = 'WikiGalleryPageStore("$group")->parent("$name")';
-$FmtPV['$GalleryNext'] = 'WikiGalleryPageStore("$group")->neightbourPicture("$name",1)';
-$FmtPV['$GalleryNextNext'] = 'WikiGalleryPageStore("$group")->neightbourPicture("$name",2)';
-$FmtPV['$GalleryPrev'] = 'WikiGalleryPageStore("$group")->neightbourPicture("$name",-1)';
-$FmtPV['$GalleryPrevPrev'] = 'WikiGalleryPageStore("$group")->neightbourPicture("$name",-2)';
+$FmtPV['$GalleryParent'] = 'WikiGalleryParent($group,$name)';
+$FmtPV['$GalleryNext'] = 'WikiGalleryNeighbourPicture("$group","$name",1)';
+$FmtPV['$GalleryNextNext'] = 'WikiGalleryNeighbourPicture("$group","$name",2)';
+$FmtPV['$GalleryPrev'] = 'WikiGalleryNeighbourPicture("$group","$name",-1)';
+$FmtPV['$GalleryPrevPrev'] = 'WikiGalleryNeighbourPicture("$group","$name",-2)';
+
+function WikiGalleryParent( $group, $name ) {
+  $pagestore =& WikiGalleryPageStore( $group );
+  return $pagestore->parent( $name );
+}
+
+function WikiGalleryNeighbourPicture( $group, $name, $dist ) {
+  $pagestore =& WikiGalleryPageStore( $group );
+  return $pagestore->neighbourPicture( $name, $dist );
+}
 
 # make it work with <2.2 versions
 if ( $VersionNum<2001900) {
@@ -89,7 +104,7 @@ if ( $VersionNum<2001900) {
 $WikiGallery_Register = array();
 $WikiGallery_DefaultGroup = false;
 
-function WikiGalleryPageStore( $group ) {
+function &WikiGalleryPageStore( $group ) {
   global $WikiGallery_Register, $pagename;
   if( !$group ) $group = PageVar($pagename,'$Group');
   if( @$WikiGallery_Register[$group] )
@@ -98,14 +113,14 @@ function WikiGalleryPageStore( $group ) {
     return WikiGalleryDefaultPageStore();
 }
 
-function WikiGalleryDefaultPageStore() {
+function &WikiGalleryDefaultPageStore() {
   global $WikiGallery_Register, $WikiGallery_DefaultGroup;
   if( !@$WikiGallery_Register[$WikiGallery_DefaultGroup] ) Abort("No gallery group defined");
   return $WikiGallery_Register[$WikiGallery_DefaultGroup];
 }
 
 // default pages
-$WikiLibDirs[] = new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
+$WikiLibDirs[] =& new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
 
 // which files?
 $WikiGallery_ImgExts = '\.jpg$|\.jpeg$|\.jpe$|\.png$|\.bmp$';
@@ -194,15 +209,15 @@ class GalleryPageStore extends PageStore {
     global $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath, 
       $WikiGallery_Register, $WikiGallery_DefaultGroup;
 
-    $WikiGallery_Register[$galleryGroup] = $this;
+    $WikiGallery_Register[$galleryGroup] =& $this;
     $WikiGallery_DefaultGroup = $galleryGroup;
 
     $this->PageStore( $WikiGallery_PicturesBasePath );
     $this->galleryGroup = $galleryGroup;
     if( $provider ) 
-      $this->provider = $provider; 
+      $this->provider =& $provider; 
     else
-      $this->provider = 
+      $this->provider =& 
 	new GalleryDirectoryProvider( $galleryGroup, 
 				      $WikiGallery_PicturesBasePath, 
 				      $WikiGallery_PicturesWebPath );	
@@ -327,7 +342,7 @@ class GalleryPageStore extends PageStore {
       $name = $matches[1];
 
       // get neighbour pictures
-      $neighbours = $this->neightbourPicture( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
+      $neighbours = $this->neighbourPicture( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
 
       // create trail page
       $page = ReadPage( 'Site.GalleryIndexTemplate' );
@@ -401,7 +416,7 @@ class GalleryPageStore extends PageStore {
     return "";
   }
 
-  function neightbourPicture( $name, $delta, $count=-1 ) {
+  function neighbourPicture( $name, $delta, $count=-1 ) {
     // is it a file?
     $pagefile = $this->provider->pageNameToFileName( $name );
     if( $pagefile==-1 || $this->provider->isAlbum("/" . $pagefile) )

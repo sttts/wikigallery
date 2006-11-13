@@ -36,9 +36,9 @@ class GalleryDirectoryProvider extends GalleryProvider {
     $this->directoryBasePath = $basePath;
     $this->directoryWebPath = $webPath;
     if( $thumbProvider )
-      $this->thumbProvider = $thumbProvider;
+      $this->thumbProvider =& $thumbProvider;
     else
-      $this->thumbProvider = 
+      $this->thumbProvider =& 
 	new InternalThumbProvider( $group, 
 				   $WikiGallery_CacheBasePath, 
 				   $WikiGallery_CacheWebPath, 

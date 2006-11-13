@@ -35,7 +35,7 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
 
   // group exists?
   if( !isset( $WikiGalleryThumbProviders[$group] ) ) Abort("Invalid gallery group \"$group\" given");
-  $provider = $WikiGalleryThumbProviders[$group];
+  $provider =& $WikiGalleryThumbProviders[$group];
 
   // get size
   $width = intval(@$_GET["width"]);
@@ -64,7 +64,7 @@ class ThumbProvider {
   function ThumbProvider( $group ) {
     global $WikiGalleryThumbProviders;
     $this->group = $group;
-    $WikiGalleryThumbProviders[$group] = $this;
+    $WikiGalleryThumbProviders[$group] =& $this;
   }
 
   function getGroup() {
@@ -107,7 +107,8 @@ class InternalThumbProvider extends ThumbProvider {
   var $picturesWebPath;
   var $scaleMethod;
 
-  function InternalThumbProvider( $group, $cacheBasePath, $cacheWebPath, $picturesBasePath, $picturesWebPath, $scaleMethod="auto" ) {
+  function InternalThumbProvider( $group, $cacheBasePath, $cacheWebPath, 
+				  $picturesBasePath, $picturesWebPath, $scaleMethod="auto" ) {
     $this->ThumbProvider( $group );
 
     $this->cacheBasePath = $cacheBasePath;
@@ -125,7 +126,7 @@ class InternalThumbProvider extends ThumbProvider {
       // clean up, but not too often
       if( time()-filemtime($this->cleanupTimestamp )>$WikiGallery_CleanupInterval ) {
 	//    WikiGalleryCleanupCache();
-	register_shutdown_function( 'WikiGalleryCleanupCache', $this, getcwd() );
+	register_shutdown_function( 'WikiGalleryCleanupCache', &$this, getcwd() );
       }
     }
   }
