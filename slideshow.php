@@ -34,7 +34,7 @@ function WikiGallerySlideshow( $pagename, $auth = 'read') {
 
   // find following picture
   $group = PageVar($pagename, '$Group');
-  $next = $WikiGallery_Register[$group]->neightbourPicture( PageVar($pagename, '$Name'), 1 );
+  $next = $WikiGallery_Register[$group]->neighbourPicture( PageVar($pagename, '$Name'), 1 );
   $nextpage = "$group.$next";
 
   // exists?
