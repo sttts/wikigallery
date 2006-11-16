@@ -107,7 +107,7 @@ function WikiGalleryNeighbourPicture( $group, $name, $dist ) {
   return $pagestore->neighbourPicture( $name, $dist );
 }
 
-# make it work with <2.2 versions
+// make it work with <2.2 versions
 if ( $VersionNum<2001900) {
   Markup( '{*$var}', '<{$var}', '/\\{\\*\\$/e', "'{'.\$pagename.'$'" );
 }
