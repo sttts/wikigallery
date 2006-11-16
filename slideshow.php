@@ -27,14 +27,14 @@ function WikiGallerySlideshow( $pagename, $auth = 'read') {
   global $WikiGallery_DefaultSlideshowDelay, $HTMLHeaderFmt, $WikiGallery_Register;
 
   // get delay from url
-  if( isset($_Get["delay"]) )
+  if( isset($_GET["delay"]) )
     $delay = intval($_GET["delay"]);
   else
     $delay = $WikiGallery_DefaultSlideshowDelay;
 
   // find following picture
   $group = PageVar($pagename, '$Group');
-  $next = $WikiGallery_Register[$group]->neighbourPicture( PageVar($pagename, '$Name'), 1 );
+  $next = $WikiGallery_Register[$group]->neighbourPicturePage( PageVar($pagename, '$Name'), 1 );
   $nextpage = "$group.$next";
 
   // exists?
