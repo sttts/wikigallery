@@ -51,3 +51,7 @@ function WikiGalleryMimeType( $file ) {
   else if( preg_match("/.png$/i", $file) ) return 'image/png'; 
   else return false;  
 }
+
+function WikiGalleryIsFileAndNonZero( $file ) {
+    return is_file($file) && filesize($file)>0;
+}

@@ -73,8 +73,8 @@ Markup('(:gallerypicturerandom group? width album:)',
        'WikiGalleryPicture( \'$2\', \'$3\',\'$4\', true)');
 
 function WikiGalleryPicture( $group, $width, $path, $random=false ) {
-  $pagestore =& WikiGalleryPageStore( $group );
-  return $pagestore->picture( $width, $path, $random );
+    $pagestore =& WikiGalleryPageStore( $group );
+    return $pagestore->picture( $width, $path, $random );
 }
 
 // Page variables
@@ -93,23 +93,23 @@ $FmtPV['$GalleryPrevPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",-1
 $FmtPV['$GalleryPrevPrevPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",-2)';
 
 function WikiGalleryParent( $group, $name ) {
-  $pagestore =& WikiGalleryPageStore( $group );
-  return $pagestore->parent( $name );
+    $pagestore =& WikiGalleryPageStore( $group );
+    return $pagestore->parent( $name );
 }
 
 function WikiGalleryNeighbourPage( $group, $name, $dist ) {
-  $pagestore =& WikiGalleryPageStore( $group );
-  return $pagestore->neighbourPicturePage( $name, $dist );
+    $pagestore =& WikiGalleryPageStore( $group );
+    return $pagestore->neighbourPicturePage( $name, $dist );
 }
 
 function WikiGalleryNeighbourPicture( $group, $name, $dist ) {
-  $pagestore =& WikiGalleryPageStore( $group );
-  return $pagestore->neighbourPicture( $name, $dist );
+    $pagestore =& WikiGalleryPageStore( $group );
+    return $pagestore->neighbourPicture( $name, $dist );
 }
 
 // make it work with <2.2 versions
 if ( $VersionNum<2001900) {
-  Markup( '{*$var}', '<{$var}', '/\\{\\*\\$/e', "'{'.\$pagename.'$'" );
+    Markup( '{*$var}', '<{$var}', '/\\{\\*\\$/e', "'{'.\$pagename.'$'" );
 }
 
 #################################################################################
@@ -119,18 +119,18 @@ $WikiGallery_Register = array();
 $WikiGallery_DefaultGroup = false;
 
 function &WikiGalleryPageStore( $group ) {
-  global $WikiGallery_Register, $pagename;
-  if( !$group ) $group = PageVar($pagename,'$Group');
-  if( @$WikiGallery_Register[$group] )
-    return $WikiGallery_Register[$group];
-  else
-    return WikiGalleryDefaultPageStore();
+    global $WikiGallery_Register, $pagename;
+    if( !$group ) $group = PageVar($pagename,'$Group');
+    if( @$WikiGallery_Register[$group] )
+        return $WikiGallery_Register[$group];
+    else
+        return WikiGalleryDefaultPageStore();
 }
 
 function &WikiGalleryDefaultPageStore() {
-  global $WikiGallery_Register, $WikiGallery_DefaultGroup;
-  if( !@$WikiGallery_Register[$WikiGallery_DefaultGroup] ) Abort("No gallery group defined");
-  return $WikiGallery_Register[$WikiGallery_DefaultGroup];
+    global $WikiGallery_Register, $WikiGallery_DefaultGroup;
+    if( !@$WikiGallery_Register[$WikiGallery_DefaultGroup] ) Abort("No gallery group defined");
+    return $WikiGallery_Register[$WikiGallery_DefaultGroup];
 }
 
 // default pages
@@ -152,373 +152,373 @@ $FPLTemplatePageFmt[] = '{$SiteGroup}.GalleryListTemplates';
 // new picture size?
 $WikiGallery_Size = $WikiGallery_DefaultSize;
 if( isset($_COOKIE["gallerysize"]) ) {
-  $WikiGallery_Size = intval($_COOKIE["gallerysize"]);
+    $WikiGallery_Size = intval($_COOKIE["gallerysize"]);
 }
 if( isset($_GET["gallerysize"]) ) {
-  $WikiGallery_Size = intval($_GET["gallerysize"]);
-  setcookie("gallerysize", $WikiGallery_Size, time()+3600);
+    $WikiGallery_Size = intval($_GET["gallerysize"]);
+    setcookie("gallerysize", $WikiGallery_Size, time()+3600);
 }
 if( $WikiGallery_Size<0 || $WikiGallery_Size>10000 ) {
-  $WikiGallery_Size = $WikiGallery_DefaultSize;
+    $WikiGallery_Size = $WikiGallery_DefaultSize;
 }
 
 require_once( "slideshow.php" );     
 
 // filename <-> pagename conversion
 function fileNameToPageName( $filename ) {
-  global $WikiGallery_PathDelimiter,$WikiGallery_ImgExts;
-  $pagename = preg_replace( array('/'.$WikiGallery_ImgExts.'$/i', "/[^a-zA-Z0-9\\/]/", "/\\//"),
-			    array('', '', $WikiGallery_PathDelimiter), 
-			    $filename );
+    global $WikiGallery_PathDelimiter,$WikiGallery_ImgExts;
+    $pagename = preg_replace( array('/'.$WikiGallery_ImgExts.'$/i', "/[^a-zA-Z0-9\\/]/", "/\\//"),
+                              array('', '', $WikiGallery_PathDelimiter), 
+                              $filename );
   
-  return ucfirst($pagename);
+    return ucfirst($pagename);
 }
 
 class GalleryProvider {
-  var $group;
+    var $group;
 
-  function GalleryProvider( $group ) {
-    $this->group = $group;
-  }
-  // map a pagename back to a filename (could be slow, i.e. iterating over all files)
-  function pageNameToFileName( $pageName ) {
-    return false;
-  }
+    function GalleryProvider( $group ) {
+        $this->group = $group;
+    }
+    // map a pagename back to a filename (could be slow, i.e. iterating over all files)
+    function pageNameToFileName( $pageName ) {
+        return false;
+    }
 
-  // list the filenames for an album
-  function getFilenames( $path, $albums=false ) {
-    return false;
-  }
+    // list the filenames for an album
+    function getFilenames( $path, $albums=false ) {
+        return false;
+    }
 
-  // return if it exists and is an album
-  function isAlbum( $path ) {
-    return false;
-  }
+    // return if it exists and is an album
+    function isAlbum( $path ) {
+        return false;
+    }
 
-  // return if it exists and is a picture
-  function isPicture( $path ) {
-    return false;
-  }
+    // return if it exists and is a picture
+    function isPicture( $path ) {
+        return false;
+    }
 
-  // return the mtime of a picture
-  function pictureTime( $path ) {
-    global $Now;
-    return $Now;
-  }
+    // return the mtime of a picture
+    function pictureTime( $path ) {
+        global $Now;
+        return $Now;
+    }
 
-  // return the url to show a thumbnail of the given size
-  function thumb( $path, $size ) {
-    return false;
-  }
+    // return the url to show a thumbnail of the given size
+    function thumb( $path, $size ) {
+        return false;
+    }
 }
 
 require_once( "directoryprovider.php" );
 
 class GalleryPageStore extends PageStore {
-  var $galleryGroup;
-  var $dirfmt;
-  var $provider;
+    var $galleryGroup;
+    var $dirfmt;
+    var $provider;
 
-  function GalleryPageStore( $galleryGroup, $provider=false ) {
-    global $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath, 
-      $WikiGallery_Register, $WikiGallery_DefaultGroup;
+    function GalleryPageStore( $galleryGroup, $provider=false ) {
+        global $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath, 
+            $WikiGallery_Register, $WikiGallery_DefaultGroup;
 
-    $WikiGallery_Register[$galleryGroup] =& $this;
-    $WikiGallery_DefaultGroup = $galleryGroup;
+        $WikiGallery_Register[$galleryGroup] =& $this;
+        $WikiGallery_DefaultGroup = $galleryGroup;
 
-    $this->PageStore( $WikiGallery_PicturesBasePath );
-    $this->galleryGroup = $galleryGroup;
-    if( $provider ) 
-      $this->provider =& $provider; 
-    else
-      $this->provider =& 
-	new GalleryDirectoryProvider( $galleryGroup, 
-				      $WikiGallery_PicturesBasePath, 
-				      $WikiGallery_PicturesWebPath );	
-  }
-
-  function pagefile($name) {
-    return $this->provider->pageNameToFileName( $name );
-  }
-
-  function exists($pagename) {
-    // In gallery group?
-    if( PageVar($pagename, '$Group')!=$this->galleryGroup )
-      return false;
-
-    // get page name
-    $name = PageVar($pagename, '$Name');    
-
-    // HomePage?
-    if( $name=="HomePage" || $name=="GroupHeader" ) return true;
-
-    // trail index, album or navigation page?
-    if( preg_match( '/^(.*)(Index|Albums|Navigation)$/', $name, $matches ) ) {
-      $name = $matches[1];
+        $this->PageStore( $WikiGallery_PicturesBasePath );
+        $this->galleryGroup = $galleryGroup;
+        if( $provider ) 
+            $this->provider =& $provider; 
+        else
+            $this->provider =& 
+                new GalleryDirectoryProvider( $galleryGroup, 
+                                              $WikiGallery_PicturesBasePath, 
+                                              $WikiGallery_PicturesWebPath );   
     }
 
-    // does picture or directory exist?
-    $pagefile = $this->pagefile($name);
-    if( $pagefile!=-1 )
-      return true;
-
-    return false;
-  }
-
-  function read($pagename, $since=0) {
-    global $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now, $WikiGallery_NavThumbnailColumns;
-
-    // In gallery group?
-    if( PageVar($pagename, '$Group')!=$this->galleryGroup )
-      return false;
-
-    // get page name
-    $name = PageVar($pagename, '$Name');
-
-    // Homepage?
-    if( $name=="HomePage" ) {
-      $page = ReadPage( 'Site.GalleryHomePageTemplate' );
-      $page['name'] = $pagename;
-      return $page;
+    function pagefile($name) {
+        return $this->provider->pageNameToFileName( $name );
     }
 
-    // GroupHeader?
-    if( $name=="GroupHeader" ) {
-      $page = ReadPage( 'Site.GalleryGroupHeader' );
-      $page['name'] = $pagename;
-      return $page;
+    function exists($pagename) {
+        // In gallery group?
+        if( PageVar($pagename, '$Group')!=$this->galleryGroup )
+            return false;
+
+        // get page name
+        $name = PageVar($pagename, '$Name');    
+
+        // HomePage?
+        if( $name=="HomePage" || $name=="GroupHeader" ) return true;
+
+        // trail index, album or navigation page?
+        if( preg_match( '/^(.*)(Index|Albums|Navigation)$/', $name, $matches ) ) {
+            $name = $matches[1];
+        }
+
+        // does picture or directory exist?
+        $pagefile = $this->pagefile($name);
+        if( $pagefile!=-1 )
+            return true;
+
+        return false;
     }
 
-    // Trail index page?
-    if( preg_match( '/^(.*)Index$/', $name, $matches ) ) {
-      // is it a directory?
-      $name = $matches[1];
-      $pagefile = $this->pagefile($name);
-      if( $pagefile==-1 || !$this->provider->isAlbum("/" . $pagefile) )
-	return false;
-      if( $pagefile=="" )
-	$pagefileslash = "";
-      else
-	$pagefileslash = "$pagefile/";
+    function read($pagename, $since=0) {
+        global $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now, $WikiGallery_NavThumbnailColumns;
 
-      // create trail of pictures
-      $pictures = $this->provider->getFilenames( "/" . $pagefile );
-      if( !$pictures ) return false;
+        // In gallery group?
+        if( PageVar($pagename, '$Group')!=$this->galleryGroup )
+            return false;
 
-      $page = ReadPage( 'Site.GalleryIndexTemplate' );
-      $link = $this->galleryGroup . "." . fileNameToPageName( $pagefile );
-      #$page["text"] .= "\n* [[$link|(:gallerypicture $WikiGallery_OverviewThumbnailWidth " . $this->galleryslash . $pagefile . "/" . $pictures[0] . ":)]]\n";
-      #$page["targets"] .= ",$link";
-      foreach( $pictures as $k ) {
-	$link = $this->galleryGroup . "." . fileNameToPageName( "$pagefileslash$k" );
-#	$page["text"] .= "* [[$link]]\n";
-	$page["text"] .= "* [[$link]]\n";
-	$page["targets"] .= ",$link";
-      }
-      $page['name'] = $pagename;
+        // get page name
+        $name = PageVar($pagename, '$Name');
+
+        // Homepage?
+        if( $name=="HomePage" ) {
+            $page = ReadPage( 'Site.GalleryHomePageTemplate' );
+            $page['name'] = $pagename;
+            return $page;
+        }
+
+        // GroupHeader?
+        if( $name=="GroupHeader" ) {
+            $page = ReadPage( 'Site.GalleryGroupHeader' );
+            $page['name'] = $pagename;
+            return $page;
+        }
+
+        // Trail index page?
+        if( preg_match( '/^(.*)Index$/', $name, $matches ) ) {
+            // is it a directory?
+            $name = $matches[1];
+            $pagefile = $this->pagefile($name);
+            if( $pagefile==-1 || !$this->provider->isAlbum("/" . $pagefile) )
+                return false;
+            if( $pagefile=="" )
+                $pagefileslash = "";
+            else
+                $pagefileslash = "$pagefile/";
+
+            // create trail of pictures
+            $pictures = $this->provider->getFilenames( "/" . $pagefile );
+            if( !$pictures ) return false;
+
+            $page = ReadPage( 'Site.GalleryIndexTemplate' );
+            $link = $this->galleryGroup . "." . fileNameToPageName( $pagefile );
+            // $page["text"] .= "\n* [[$link|(:gallerypicture $WikiGallery_OverviewThumbnailWidth " . $this->galleryslash . $pagefile . "/" . $pictures[0] . ":)]]\n";
+            // $page["targets"] .= ",$link";
+            foreach( $pictures as $k ) {
+                $link = $this->galleryGroup . "." . fileNameToPageName( "$pagefileslash$k" );
+            // $page["text"] .= "* [[$link]]\n";
+                $page["text"] .= "* [[$link]]\n";
+                $page["targets"] .= ",$link";
+            }
+            $page['name'] = $pagename;
       
-      return $page;
-    }
+            return $page;
+        }
 
-    // album index page?
-    if( preg_match( '/^(.*)Albums$/', $name, $matches ) ) {
-      // is it a directory?
-      $name = $matches[1];
-      $pagefile = $this->pagefile($name);
-      if( $pagefile==-1 || !$this->provider->isAlbum("/" . $pagefile) )
-	return false;
-      if( $pagefile=="" )
-	$pagefileslash = "";
-      else
-	$pagefileslash = "$pagefile/";
+        // album index page?
+        if( preg_match( '/^(.*)Albums$/', $name, $matches ) ) {
+            // is it a directory?
+            $name = $matches[1];
+            $pagefile = $this->pagefile($name);
+            if( $pagefile==-1 || !$this->provider->isAlbum("/" . $pagefile) )
+                return false;
+            if( $pagefile=="" )
+                $pagefileslash = "";
+            else
+                $pagefileslash = "$pagefile/";
 
-      // create trail of directories
-      $albums = $this->provider->getFilenames( "/" . $pagefile, true );
-      if( !$albums ) return false;
+            // create trail of directories
+            $albums = $this->provider->getFilenames( "/" . $pagefile, true );
+            if( !$albums ) return false;
 
-      $page = ReadPage( 'Site.GalleryIndexTemplate' );
-      $link = $this->galleryGroup . "." . fileNameToPageName( $pagefile );
-      #$page["text"] .= "\n* [[$link|(:gallerypicture $WikiGallery_OverviewThumbnailWidth " . $this->galleryslash . $pagefile . "/" . $albums[0] . ":)]]\n";
-      #$page["targets"] .= ",$link";
-      foreach( $albums as $k ) {
-	$link = $this->galleryGroup . "." . fileNameToPageName( "$pagefileslash$k" );
-#	$page["text"] .= "* [[$link]]\n";
-	$page["text"] .= "* [[$link]]\n";
-	$page["targets"] .= ",$link";
-      }
-      $page['name'] = $pagename;
+            $page = ReadPage( 'Site.GalleryIndexTemplate' );
+            $link = $this->galleryGroup . "." . fileNameToPageName( $pagefile );
+            // $page["text"] .= "\n* [[$link|(:gallerypicture $WikiGallery_OverviewThumbnailWidth " . $this->galleryslash . $pagefile . "/" . $albums[0] . ":)]]\n";
+            // $page["targets"] .= ",$link";
+            foreach( $albums as $k ) {
+                $link = $this->galleryGroup . "." . fileNameToPageName( "$pagefileslash$k" );
+                //   $page["text"] .= "* [[$link]]\n";
+                $page["text"] .= "* [[$link]]\n";
+                $page["targets"] .= ",$link";
+            }
+            $page['name'] = $pagename;
       
-      return $page;
-    }
+            return $page;
+        }
 
-    // navigation trail index page?
-    if( preg_match( '/^(.*)Navigation$/', $name, $matches ) ) { 
-      $name = $matches[1];
+        // navigation trail index page?
+        if( preg_match( '/^(.*)Navigation$/', $name, $matches ) ) { 
+            $name = $matches[1];
 
-      // get neighbour pictures
-      $neighbours = $this->neighbourPicturePage( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
+            // get neighbour pictures
+            $neighbours = $this->neighbourPicturePage( $name, -($WikiGallery_NavThumbnailColumns-1)/2, $WikiGallery_NavThumbnailColumns );
       
-	// create trail page
-      $page = ReadPage( 'Site.GalleryIndexTemplate' );
-      if( $neighbours ) {
-	foreach( $neighbours as $pic ) {
-	  $page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . $pic . "]]\n";
-	}
-      }
+            // create trail page
+            $page = ReadPage( 'Site.GalleryIndexTemplate' );
+            if( $neighbours ) {
+                foreach( $neighbours as $pic ) {
+                    $page["text"] .= "* [[" . PageVar($pagename, '$Group') . "/" . $pic . "]]\n";
+                }
+            }
 
-      return $page;
-    }
+            return $page;
+        }
     
-    // a gallery page?
-    $pagefile = $this->pagefile($name);
-    if( $pagefile!=-1 ) {
-      // overview or picture?
-      $filename = $this->slashgallery . "/" . $pagefile;
-      if( $this->provider->isAlbum($filename) ) {    
-	// overview
-	if( PageExists( $this->galleryGroup . ".GalleryPictureTemplate" ) )
-	  $page = ReadPage( $this->galleryGroup . ".GalleryOverviewTemplate" );
-	else
-	  $page = ReadPage( "$SiteGroup.GalleryOverviewTemplate" );
-	if( @$page ) {
-	  $title = WikiGalleryLastComponent($pagefile);
-	  $page['title'] = $title;
-	  $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
-	  $page['galleryalbum'] = $this->galleryslash . $pagefile;
-	  $page['ctime'] = $this->provider->pictureTime($filename);
-	  $page['time'] = $page['ctime']; //filemtime( $filename );
-	  return $page;
-	}
-      } elseif( $this->provider->isPicture($filename) ) {    
-	// picture
-	if( PageExists( $this->galleryGroup . ".GalleryPictureTemplate" ) )
-	  $page = ReadPage( $this->galleryGroup . ".GalleryPictureTemplate" );
-	else
-	  $page = ReadPage( "$SiteGroup.GalleryPictureTemplate" );
-	if( @$page ) {
-	  $page['gallerypicture'] = $this->galleryslash . $pagefile;
-	  
-	  $pictureWithExt = WikiGalleryLastComponent($pagefile);
-	  $picture = WikiGalleryLeadingComponents($pictureWithExt,".");
-	  $album = WikiGalleryLeadingComponents($pagefile);
-	  if( $album ) 
-	    $albumPage = fileNameToPageName( $album );
-	  else
-	    $albumPage = "HomePage";
-
-	  $title = PageVar($this->galleryGroup . ".$albumPage", '$Title') . " - " . $picture;
-	  $page['title'] = $title;
-	  $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
-	  $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . $albumPage;
-	  $page['ctime'] = $this->provider->pictureTime( $filename );
-	  $page['time'] = $page['ctime'];
-	  return $page;
-	}
-      }
-    }
-
-    return false;
-  }
-
-  function parent( $name ) {
-    // is it a directory?
-    $pagefile = $this->provider->pageNameToFileName( $name );
-    if( $pagefile==-1 && !$this->provider->isAlbum("/" . $pagefile) )
-    return false;
-
-    // return parent page
-    $path = WikiGalleryLeadingComponents($pagefile);
-    if( $path ) return fileNameToPageName( $path );
-    return "";
-  }
-
-  function neighbourPicturePage( $name, $delta, $count=-1 ) {
-    $pics = $this->neighbourPicture( $name, $delta, $count );
-    if( !$pics ) return false;
-
-    if( $count!=-1 ) {
-      $ret = array();
-      foreach( $pics as $pic ) {
-	$ret[] = fileNameToPageName($pic);
-      }
-      return $ret;
-    } else {
-      if( $pics=="" )
-	return "";
-      else
-	return fileNameToPageName($pics);
-    }
-  }
-
-  function neighbourPicture( $name, $delta, $count=-1 ) {
-    // is it a file?
-    $pagefile = $this->provider->pageNameToFileName( $name );
-    if( $pagefile==-1 || $this->provider->isAlbum("/" . $pagefile) )
-    return false;
-
-    // split pathes into filename and path
-    $filename = WikiGalleryLastComponent( $pagefile );
-    $path = WikiGalleryLeadingComponents( $pagefile );
-    if( !$path ) {
-      $slashpath = "";
-      $pathslash = "";
-    } else {
-      $slashpath = "/" . $path;
-      $pathslash = $path . "/";
-    }
-    
-    // find position in the album of the current picture
-    $pictures = $this->provider->getFilenames( $slashpath );    
-    $indexed = array();
-    $i = 0;
-    $thisIndex = -1;
-    foreach( $pictures as $k ) {
-      $indexed[$i] = $k;    
-      if( $k==$filename ) {
-	$thisIndex = $i;
-      }
-      $i++;
-    }
-    $picturesNum = $i;
-    
-    // found?
-    if( $thisIndex==-1 ) return false;
-
-    // get $count many neighbours from $thisIndex-$delta  
-    if( $count==-1 ) {
-      $i = $thisIndex+$delta;
-      if( $i>=0 && $i<$picturesNum )
-	return $pathslash . $indexed[$i];
-      else
-	return "";
-    } else {
-      $i = max($thisIndex+$delta, 0);
-      $ret = array();
-
-      while( $i<$picturesNum && $i<$thisIndex+$delta+$count ) {
-	$ret[] = $pathslash . $indexed[$i];
-	$i++;
-      }
+        // a gallery page?
+        $pagefile = $this->pagefile($name);
+        if( $pagefile!=-1 ) {
+            // overview or picture?
+            $filename = $this->slashgallery . "/" . $pagefile;
+            if( $this->provider->isAlbum($filename) ) {    
+                // overview
+                if( PageExists( $this->galleryGroup . ".GalleryPictureTemplate" ) )
+                    $page = ReadPage( $this->galleryGroup . ".GalleryOverviewTemplate" );
+                else
+                    $page = ReadPage( "$SiteGroup.GalleryOverviewTemplate" );
+                if( @$page ) {
+                    $title = WikiGalleryLastComponent($pagefile);
+                    $page['title'] = $title;
+                    $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
+                    $page['galleryalbum'] = $this->galleryslash . $pagefile;
+                    $page['ctime'] = $this->provider->pictureTime($filename);
+                    $page['time'] = $page['ctime']; //filemtime( $filename );
+                    return $page;
+                }
+            } elseif( $this->provider->isPicture($filename) ) {    
+                // picture
+                if( PageExists( $this->galleryGroup . ".GalleryPictureTemplate" ) )
+                    $page = ReadPage( $this->galleryGroup . ".GalleryPictureTemplate" );
+                else
+                    $page = ReadPage( "$SiteGroup.GalleryPictureTemplate" );
+                if( @$page ) {
+                    $page['gallerypicture'] = $this->galleryslash . $pagefile;
       
-      return $ret;
+                    $pictureWithExt = WikiGalleryLastComponent($pagefile);
+                    $picture = WikiGalleryLeadingComponents($pictureWithExt,".");
+                    $album = WikiGalleryLeadingComponents($pagefile);
+                    if( $album ) 
+                        $albumPage = fileNameToPageName( $album );
+                    else
+                        $albumPage = "HomePage";
+
+                    $title = PageVar($this->galleryGroup . ".$albumPage", '$Title') . " - " . $picture;
+                    $page['title'] = $title;
+                    $page['text'] = preg_replace( '/\(:title\s[^:]*:\)/', "(:title $title:)", $page['text'] );
+                    $page['galleryoverview'] = PageVar($pagename,'$Group') . "." . $albumPage;
+                    $page['ctime'] = $this->provider->pictureTime( $filename );
+                    $page['time'] = $page['ctime'];
+                    return $page;
+                }
+            }
+        }
+
+        return false;
     }
-  }
 
-  function picture( $size, $path, $random=false ) {
-    $path = WikiGallerySecurePath( $path );  
+    function parent( $name ) {
+        // is it a directory?
+        $pagefile = $this->provider->pageNameToFileName( $name );
+        if( $pagefile==-1 && !$this->provider->isAlbum("/" . $pagefile) )
+            return false;
 
-    // random picture?
-    if( $random ) {
-      // get pictures
-      $pictures = $this->provider->getFilenames( "/" . $path );
-      if( !$pictures ) return false;
+        // return parent page
+        $path = WikiGalleryLeadingComponents($pagefile);
+        if( $path ) return fileNameToPageName( $path );
+        return "";
+    }
+
+    function neighbourPicturePage( $name, $delta, $count=-1 ) {
+        $pics = $this->neighbourPicture( $name, $delta, $count );
+        if( !$pics ) return false;
+
+        if( $count!=-1 ) {
+            $ret = array();
+            foreach( $pics as $pic ) {
+                $ret[] = fileNameToPageName($pic);
+            }
+            return $ret;
+        } else {
+            if( $pics=="" )
+                return "";
+            else
+                return fileNameToPageName($pics);
+        }
+    }
+
+    function neighbourPicture( $name, $delta, $count=-1 ) {
+        // is it a file?
+        $pagefile = $this->provider->pageNameToFileName( $name );
+        if( $pagefile==-1 || $this->provider->isAlbum("/" . $pagefile) )
+            return false;
+
+        // split pathes into filename and path
+        $filename = WikiGalleryLastComponent( $pagefile );
+        $path = WikiGalleryLeadingComponents( $pagefile );
+        if( !$path ) {
+            $slashpath = "";
+            $pathslash = "";
+        } else {
+            $slashpath = "/" . $path;
+            $pathslash = $path . "/";
+        }
+    
+        // find position in the album of the current picture
+        $pictures = $this->provider->getFilenames( $slashpath );    
+        $indexed = array();
+        $i = 0;
+        $thisIndex = -1;
+        foreach( $pictures as $k ) {
+            $indexed[$i] = $k;    
+            if( $k==$filename ) {
+                $thisIndex = $i;
+            }
+            $i++;
+        }
+        $picturesNum = $i;
+    
+        // found?
+        if( $thisIndex==-1 ) return false;
+
+        // get $count many neighbours from $thisIndex-$delta  
+        if( $count==-1 ) {
+            $i = $thisIndex+$delta;
+            if( $i>=0 && $i<$picturesNum )
+                return $pathslash . $indexed[$i];
+            else
+                return "";
+        } else {
+            $i = max($thisIndex+$delta, 0);
+            $ret = array();
+
+            while( $i<$picturesNum && $i<$thisIndex+$delta+$count ) {
+                $ret[] = $pathslash . $indexed[$i];
+                $i++;
+            }
       
-      // choose random picture
-      $num = rand(0, count($pictures)-1);
-      $path .= "/" . $pictures[$num];
+            return $ret;
+        }
     }
+
+    function picture( $size, $path, $random=false ) {
+        $path = WikiGallerySecurePath( $path );  
+
+        // random picture?
+        if( $random ) {
+            // get pictures
+            $pictures = $this->provider->getFilenames( "/" . $path );
+            if( !$pictures ) return false;
+      
+            // choose random picture
+            $num = rand(0, count($pictures)-1);
+            $path .= "/" . $pictures[$num];
+        }
   
-    // return phpthumb url
-    return $this->provider->thumb( $path, $size );
-  }
+        // return phpthumb url
+        return $this->provider->thumb( $path, $size );
+    }
 }
