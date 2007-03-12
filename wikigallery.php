@@ -242,6 +242,8 @@ class GalleryPageStore extends PageStore {
     }
 
     function exists($pagename) {
+        global $DefaultPage;
+
         // In gallery group?
         if( PageVar($pagename, '$Group')!=$this->galleryGroup )
             return false;
@@ -266,7 +268,8 @@ class GalleryPageStore extends PageStore {
     }
 
     function read($pagename, $since=0) {
-        global $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now, $WikiGallery_NavThumbnailColumns;
+        global $WikiGallery_OverviewThumbnailWidth, $SiteGroup, $Now, 
+            $WikiGallery_NavThumbnailColumns, $DefaultPage;
 
         // In gallery group?
         if( PageVar($pagename, '$Group')!=$this->galleryGroup )
