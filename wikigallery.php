@@ -250,7 +250,7 @@ class GalleryPageStore extends PageStore {
         $name = PageVar($pagename, '$Name');    
 
         // HomePage?
-        if( $name=="HomePage" || $name=="GroupHeader" ) return true;
+        if( $name==$DefaultName || $name=="GroupHeader" ) return true;
 
         // trail index, album or navigation page?
         if( preg_match( '/^(.*)(Index|Albums|Navigation)$/', $name, $matches ) ) {
@@ -276,7 +276,7 @@ class GalleryPageStore extends PageStore {
         $name = PageVar($pagename, '$Name');
 
         // Homepage?
-        if( $name=="HomePage" ) {
+        if( $name==$DefaultName ) {
             $page = ReadPage( 'Site.GalleryHomePageTemplate' );
             $page['name'] = $pagename;
             return $page;
@@ -404,7 +404,7 @@ class GalleryPageStore extends PageStore {
                     if( $album ) 
                         $albumPage = fileNameToPageName( $album );
                     else
-                        $albumPage = "HomePage";
+                        $albumPage = $DefaultName;
 
                     $title = PageVar($this->galleryGroup . ".$albumPage", '$Title') . " - " . $picture;
                     $page['title'] = $title;
