@@ -1,14 +1,17 @@
-version=pmwiki-2.2.0-beta27 ordered=1 urlencoded=1
+version=pmwiki-2.2.0-beta35 ordered=1 urlencoded=1
 agent=Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1) Gecko/20061010 Firefox/2.0
 author=Stefan
 csum=
 ctime=1158163725
-host=138.246.7.16
+host=141.84.9.37
 name=Site.GalleryListTemplates
-rev=65
+rev=66
 targets=Site.GalleryListTemplates,Pics.GalleryPicture,Site.FullName
-text=[[#galleryoverview]]\%0a[[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] \%0a[[#galleryoverviewend]]%0a%0a[[#gallerynavigation]]\%0a[[{=$FullName}|(:gallerypicture 60 {=$GalleryPicture}:)]]\%0a[[#gallerynavigationend]]%0a%0a[[#gallerypreloadnavigation]]\%0a%25comment%25 (:gallerypicture 60 {=$GalleryPicture}:)\%0a[[#gallerypreloadnavigationend]]%0a%0a[[#galleryalbums]]%0a%25lframe thumb margin=0.5em text-align=center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%25%25%0a[[#galleryalbumsend]]%0a%0a[[#gallerylist]]%0a[[{=$FullName} | (:gallerypicture {$GallerySize} {=$GalleryPicture}:)]]%0a[[#gallerylistend]]%0a
-time=1173699328
+text=[[#galleryoverview]]\%0a[[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] \%0a[[#galleryoverviewend]]%0a%0a[[#gallerynavigation]]\%0a[[{=$FullName}|(:gallerypicture 60 {=$GalleryPicture}:)]]\%0a[[#gallerynavigationend]]%0a%0a[[#gallerypreloadnavigation]]\%0a%25comment%25 (:gallerypicture 60 {=$GalleryPicture}:)\%0a[[#gallerypreloadnavigationend]]%0a%0a[[#galleryalbums]]%0a%25lframe margin=0.5em text-align=center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%25%25%0a[[#galleryalbumsend]]%0a%0a[[#gallerylist]]%0a[[{=$FullName} | (:gallerypicture {$GallerySize} {=$GalleryPicture}:)]]%0a[[#gallerylistend]]%0a
+time=1174573676
+author:1174573676=Stefan
+diff:1174573676:1173699328:=14c14%0a%3c %25lframe margin=0.5em text-align=center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%25%25%0a---%0a> %25lframe thumb margin=0.5em text-align=center%25 [[{=$FullName} | (:gallerypicturerandom 120 {=$GalleryAlbum}:)]] | [[{=$FullName}| [-{=$Title}-]]]%25%25%0a
+host:1174573676=141.84.9.37
 author:1173699328=Stefan
 diff:1173699328:1163415028:=2c2%0a%3c [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]] \%0a---%0a> [[{=$FullName}|(:gallerypicture 120 {=$GalleryPicture}:)]]\%0a
 host:1173699328=138.246.7.16
