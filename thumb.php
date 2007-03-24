@@ -1,7 +1,8 @@
 <?php if (!defined('PmWiki')) exit();
 /*
  * WikiGallery - automatic easy to use gallery extension for PmWiki
- * (c) 2006 Stefan Schimanski <sts@1stein.org>
+ * (c) 2006,2007 Stefan Schimanski <sts@1stein.org>
+ *     2007 Picture height patch by JamesM
  *
  * Ideas from SimpleGallery by Bram Brambring <http://www.brambring.nl>
  * Some code from Qdig by Hagan Fox <http://qdig.sourceforge.net/>
@@ -42,6 +43,7 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
     $height = intval(@$_GET["height"]);
     if( $width<0 || $width>1600 ) $width=0;
     if( $height<0 || $height>1200 ) $height=0;
+    $resizeMode = urldecode(@$_GET["mode"]);
 
     // check authorization
     $pagename = fileNameToPageName( $path );
@@ -52,7 +54,7 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
     }
 
     // get image
-    $provider->thumb( $path, $width, $height );
+    $provider->thumb( $path, $width, $height, $resizeMode );
     exit;
 }
 
@@ -71,11 +73,11 @@ class ThumbProvider {
         return $this->group;
     }
 
-    function thumbUrl( $path, $size ) {
+    function thumbUrl( $path, $width, $height, $resizeMode="" ) {
         Abort( "Gallery ". $this->group . " does not implement thumbnails" );
     }
 
-    function thumb( $path, $width, $height ) {
+    function thumb( $path, $width, $height, $resizeMode="" ) {
         Abort( "Gallery ". $this->group . " does not implement thumby of thumbnail images" );
     }
 }
@@ -89,11 +91,18 @@ class PhpThumbProvider extends ThumbProvider {
         $this->phpThumbUrl = $phpThumbUrl;
     }
 
-    function thumbUrl( $path, $size ) {
-        if( $size==0 )
-            return $this->phpTHumbUrl . "?src=" . urlencode($path) . " ";
-        else
-            return $this->phpThumbUrl . "?w=" . urlencode($size) . "&src=" . urlencode($path) . " ";
+    function thumbUrl( $path, $width, $height, $resizeMode="" ) {
+    	$url=$this->phpThumbUrl.'?';
+    	if ($width!=0) {
+    		$url .= 'w=' . urlencode($width) . '&';
+    	}
+    	if ($height!=0) {
+    		$url .= 'h=' . urlencode($height). '&';
+    	}
+        if( $width!=0 && $height!=0 && strchr($resizeMode,"!") ) {
+            $url .= 'iar=1&';
+        }
+        return $url . 'src=' . urlencode($path) . ' ';
     }
 }
 
@@ -131,17 +140,16 @@ class InternalThumbProvider extends ThumbProvider {
         }
     }
 
-    function thumbUrl( $path, $size ) {
+    function thumbUrl( $path, $width, $height, $resizeMode ) {
         global $WikiGallery_UseAuthorization, $pagename;
-    
         // we can use a direct url to the file if authorization is not needed
         if( !$WikiGallery_UseAuthorization ) {
-            if( $size==0 )
+            if( $width==0 && $height=0 )
                 // give direct url to the original file
                 return 'http://'.$_SERVER['HTTP_HOST']."/".preg_replace("/ /","%20", $this->picturesWebPath . $path);
             else {
                 // give direct url to the cache file
-                $thumbnail = $this->cacheFileName( $path, $size );
+                $thumbnail = $this->cacheFileName( $path, $width, $height, $resizeMode );
                 $thumbname = $this->cacheBasePath . "/" . $thumbnail;
                 $originalname = $this->picturesBasePath . "/" . $path;
                 if( WikiGalleryIsFileAndNonZero($thumbname) && filemtime($thumbname)>=filemtime($originalname) ) {
@@ -156,20 +164,31 @@ class InternalThumbProvider extends ThumbProvider {
     
         $picpage = $this->group . "." . fileNameToPageName($path);
         $url = MakeLink( $picpage, $picpage, NULL, NULL, "\$LinkUrl" );
-        if( $size==0 )
-            return $url . '?action=thumbnail&group=' . urlencode($this->group) . '&image=' . urlencode($path) . ' ';
-        else
-            return $url . '?action=thumbnail&width=' . $size . '&group=' . urlencode($this->group) . '&image=' . urlencode($path) . ' ';
+
+    	$url.='?action=thumbnail&';
+    	if( $width!=0 ) {
+    		$url .= 'width=' . urlencode($width) . '&';
+    	}
+    	if( $height!=0 ) {
+    		$url .= 'height=' . urlencode($height). '&';
+    	}
+    	if( $resizeMode ) {
+    		$url .= 'mode=' . urlencode($resizeMode) . '&';
+    	}
+        return $url . 'group=' . urlencode($this->group) . '&image=' . urlencode($path) . ' ';
+        
     }
   
-    function cacheFileName( $path, $width=0, $height=0 ) {
+    function cacheFileName( $path, $width=0, $height=0, $resizeMode="" ) {
         global $WikiGallery_UseFlatCache;
 
         if( $width!=0 || $height!=0 )
             $size=intval($width)."x".intval($height);
         else
             $size = "original";
-    
+
+        if( strchr($resizeMode, "!") ) $size=$size . "-forcesize";
+
         $ext = substr( strrchr( $path, "." ), 1 );
         $name = $path . "/" . $size . "." . $ext;
         if( $WikiGallery_UseFlatCache )
@@ -178,7 +197,7 @@ class InternalThumbProvider extends ThumbProvider {
             return $name;
     }
   
-    function scaleGD( $original, $thumb, $width, $height ) {
+    function scaleGD( $original, $thumb, $width, $height, $resizeMode ) {
         global $WikiGallery_HighQualityResize;
     
         // libgd2 installed?
@@ -198,7 +217,16 @@ class InternalThumbProvider extends ThumbProvider {
         if( $width==0 && $height==0 ) { $width = $origWidth; $height = $origHeight; }
         else if( $width==0 ) $width = $origWidth*$height/$origHeight;
         else if( $height==0 ) $height = $origHeight*$width/$origWidth;
-    
+        else {
+            // are width:height maximal values?
+            if( !strchr($resizeMode,"!") ) {
+                $newwidth = $origWidth*$height/$origHeight;
+                $newheight = $origHeight*$width/$origWidth;
+                if( $newwidth<$width ) $width=$newwidth;
+                else if( $newheight<$height ) $height=$newheight;
+            }
+        }
+
         // load image
         switch( $format ) {
         case 'image/jpeg':
@@ -226,14 +254,15 @@ class InternalThumbProvider extends ThumbProvider {
         }
     }
   
-    function scaleIM( $original, $thumb, $width, $height ) {
+    function scaleIM( $original, $thumb, $width, $height, $resizeMode ) {
         global $WikiGallery_ImageMagickPath, $WikiGallery_HighQualityResize;
     
         // get size
         if( $width==0 ) $size="x$height";
         elseif( $height==0 ) $size=$width."x";
         else $size=$width."x".$height;
-    
+        if( strchr($resizeMode,"!") ) $size=$size."!";
+        
         // call imagemagick's convert to scale
         if( $WikiGallery_HighQualityResize )
             $command = $WikiGallery_ImageMagickPath . "convert -size $size -resize $size +profile \"*\" " . 
@@ -244,7 +273,7 @@ class InternalThumbProvider extends ThumbProvider {
         @system( $command );
     }
   
-    function scale( $original, $thumb, $width, $height ) {
+    function scale( $original, $thumb, $width, $height, $resizeMode ) {
         if( !WikiGalleryIsFileAndNonZero( $thumb ) && is_file( $original ) ) {
             // which method to use?
             $im = false;
@@ -254,8 +283,10 @@ class InternalThumbProvider extends ThumbProvider {
             else if( $this->scaleMethod=="libgd2" ) { $gd = true; }
       
             // try libgd2
-            if( $im && !WikiGalleryIsFileAndNonZero( $thumb ) ) $this->scaleIM( $original, $thumb, $width, $height );
-            if( $gd && !WikiGalleryIsFileAndNonZero( $thumb ) ) $this->scaleGD( $original, $thumb, $width, $height );
+            if( $im && !WikiGalleryIsFileAndNonZero( $thumb ) ) 
+                $this->scaleIM( $original, $thumb, $width, $height, $resizeMode );
+            if( $gd && !WikiGalleryIsFileAndNonZero( $thumb ) ) 
+                $this->scaleGD( $original, $thumb, $width, $height, $resizeMode );
       
             // did one work?
             if( !WikiGalleryIsFileAndNonZero( $thumb ) ) {
@@ -264,7 +295,7 @@ class InternalThumbProvider extends ThumbProvider {
         }
     }  
 
-    function thumb( $path, $width, $height ) {
+    function thumb( $path, $width, $height, $resizeMode="" ) {
         // exists?
         $pagename = fileNameToPageName( $path );
         $original = $this->picturesBasePath . "/" . $path;
@@ -275,7 +306,7 @@ class InternalThumbProvider extends ThumbProvider {
             $filename = $original;
         } else {
             // resize
-            $filename = $this->cacheBasePath . "/" . $this->cacheFileName( $path, $width, $height );
+            $filename = $this->cacheBasePath . "/" . $this->cacheFileName( $path, $width, $height, $resizeMode );
             $exists = WikiGalleryIsFileAndNonZero($filename);
             if( !$exists || (filemtime($filename)<filemtime($original)) ) {
                 if( is_file($filename) ) 
@@ -287,8 +318,8 @@ class InternalThumbProvider extends ThumbProvider {
                     mkdirp($dir);
                 }
           
-                // call ImageMagick to scale
-                $this->scale( $original, $filename, $width, $height );
+                // call ImageMagick or GD to scale
+                $this->scale( $original, $filename, $width, $height, $resizeMode );
             } else {
                 // touch it so that it is not purged during cleanup
                 touch( $filename );

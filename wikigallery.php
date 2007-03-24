@@ -1,7 +1,8 @@
 <?php if (!defined('PmWiki')) exit();
 /*
  * WikiGallery - automatic easy to use gallery extension for PmWiki
- * (c) 2006 Stefan Schimanski <sts@1stein.org>
+ * (c) 2006,2007 Stefan Schimanski <sts@1stein.org>
+ *     2007 Picture height patch by JamesM
  *
  * Ideas from SimpleGallery by Bram Brambring <http://www.brambring.nl>
  * Some code from Qdig by Hagan Fox <http://qdig.sourceforge.net/>
@@ -65,17 +66,30 @@ SDV($WikiGallery_DefaultSize, 640);
 // The markup:
 Markup('(:gallerypicture group? width picture:)',
        '><|',
-       "/\\(:gallerypicture(\\s([^0-9][^\\s]+))?\\s([0-9]+)\\s([^:]*):\\)/e",
-       'WikiGalleryPicture( \'$2\', \'$3\',\'$4\')');
+       "/\\(:gallerypicture(\\s([^0-9][^\\s]+))?\\s+([0-9]+)([!])?\\s+([^:]*)\\s*:\\)/e",
+       'WikiGalleryPicture( \'$2\', \'$3\', \'$3\',\'$4\',\'$5\')');
+Markup('(:gallerypicture group? width?:height?!? picture:)',
+       '><|',
+       "/\\(:gallerypicture(\\s+([^0-9][^\\s]+))?\\s+([0-9]+)?:([0-9]+)?([!])?\\s+([^:]+?)\\s*:\\)/e",
+       'WikiGalleryPicture( \'$2\',\'$3\',\'$4\',\'$5\',\'$6\')');
 Markup('(:gallerypicturerandom group? width album:)',
        '><|',
-       "/\\(:gallerypicturerandom(\\s([^0-9][^\\s]+))?\\s([0-9]+)\\s([^:]*):\\)/e",
-       'WikiGalleryPicture( \'$2\', \'$3\',\'$4\', true)');
+       "/\\(:gallerypicturerandom(\\s+([^0-9][^\\s]+))?\\s+([0-9]+)([!])?\\s+([^:]*)\\s*:\\)/e",
+       'WikiGalleryPicture( \'$2\', \'$3\', \'$3\',\'$4\',\'$5\', true)');
+Markup('(:gallerypicturerandom group? width?:height? album:)',
+       '><|',
+       "/\\(:gallerypicturerandom(\\s+([^0-9][^\\s]+))?\\s+([0-9]+)?:([0-9]+)?([!])?\\s+([^:]+?)\\s*:\\)/e",
+       'WikiGalleryPicture( \'$2\',\'$3\',\'$4\',\'$5\',\'$6\', true)');
 
-function WikiGalleryPicture( $group, $width, $path, $random=false ) {
+function WikiGalleryPicture( $group, $width, $height, $resizeMode, $path, $random=false ) {
     $pagestore =& WikiGalleryPageStore( $group );
-    return $pagestore->picture( $width, $path, $random );
+    return $pagestore->picture( $width, $height, $resizeMode, $path, $random );
 }
+
+Markup('(:gallerypicturepage picture:)',
+       '><|',
+       "/\\(:gallerypicturepage\\s+([^:]+?)\\s*:\\)/e",
+       'fileNameToPageName( \'$1\')');
 
 // Page variables
 $FmtPV['$GalleryPicture'] = '$page["gallerypicture"] ? $page["gallerypicture"] : ""';
@@ -158,11 +172,11 @@ if( isset($_GET["gallerysize"]) ) {
     $WikiGallery_Size = intval($_GET["gallerysize"]);
     setcookie("gallerysize", $WikiGallery_Size, time()+3600);
 }
-if( $WikiGallery_Size<0 || $WikiGallery_Size>10000 ) {
+if( $WikiGallery_Size<0 || $WikiGallery_Size>1600 ) {
     $WikiGallery_Size = $WikiGallery_DefaultSize;
 }
 
-require_once( "slideshow.php" );     
+require_once( "slideshow.php" );   
 
 // filename <-> pagename conversion
 function fileNameToPageName( $filename ) {
@@ -207,7 +221,7 @@ class GalleryProvider {
     }
 
     // return the url to show a thumbnail of the given size
-    function thumb( $path, $size ) {
+    function thumb( $path, $width, $height ) {
         return false;
     }
 }
@@ -239,6 +253,10 @@ class GalleryPageStore extends PageStore {
 
     function pagefile($name) {
         return $this->provider->pageNameToFileName( $name );
+    }
+
+    function filepage($file) {
+        return $this->provider->fileNameToPageName( $file );
     }
 
     function exists($pagename) {
@@ -507,8 +525,8 @@ class GalleryPageStore extends PageStore {
         }
     }
 
-    function picture( $size, $path, $random=false ) {
-        $path = WikiGallerySecurePath( $path );  
+    function picture( $width, $height, $resizeMode, $path, $random=false ) {
+        $path = WikiGallerySecurePath( $path );
 
         // random picture?
         if( $random ) {
@@ -522,6 +540,6 @@ class GalleryPageStore extends PageStore {
         }
   
         // return phpthumb url
-        return $this->provider->thumb( $path, $size );
+        return $this->provider->thumb( $path, $width, $height, $resizeMode );
     }
 }

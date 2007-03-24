@@ -1,7 +1,8 @@
 <?php if (!defined('PmWiki')) exit();
 /*
  * WikiGallery - automatic easy to use gallery extension for PmWiki
- * (c) 2006 Stefan Schimanski <sts@1stein.org>
+ * (c) 2006,2007 Stefan Schimanski <sts@1stein.org>
+ *     2007 Picture height patch by JamesM
  *
  * Ideas from SimpleGallery by Bram Brambring <http://www.brambring.nl>
  * Some code from Qdig by Hagan Fox <http://qdig.sourceforge.net/>
@@ -174,7 +175,7 @@ class GalleryDirectoryProvider extends GalleryProvider {
     return filemtime( $this->directoryBasePath . $path );
   }
 
-  function thumb( $path, $size ) {
-    return $this->thumbProvider->thumbUrl( $path, $size );
+  function thumb( $path, $width, $height, $resizeMode="" ) {
+    return $this->thumbProvider->thumbUrl( $path, $width, $height, $resizeMode );
   }
 }
