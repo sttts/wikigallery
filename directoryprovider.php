@@ -176,6 +176,12 @@ class GalleryDirectoryProvider extends GalleryProvider {
   }
 
   function thumb( $path, $width, $height, $resizeMode="" ) {
-    return $this->thumbProvider->thumbUrl( $path, $width, $height, $resizeMode );
+      $path = stripslashes( $path );
+      
+      // picture exists?
+      if( !$this->isPicture( "/" . $path ) ) return false;
+   
+      // return thumb url
+      return $this->thumbProvider->thumbUrl( $path, $width, $height, $resizeMode );
   }
 }

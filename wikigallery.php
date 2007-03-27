@@ -532,14 +532,20 @@ class GalleryPageStore extends PageStore {
         if( $random ) {
             // get pictures
             $pictures = $this->provider->getFilenames( "/" . $path );
-            if( !$pictures ) return false;
+            if( !$pictures ) {
+                // no pictures found. Try albums instead
+                $albums = $this->provider->getFilenames( "/" . $path, true );
+                if( !albums ) return false;
+                $path .= "/" . $albums[rand(0,count($albums)-1)];
+                return $this->picture( $width, $height, $resizeMode, $path, true );
+            }
       
             // choose random picture
             $num = rand(0, count($pictures)-1);
             $path .= "/" . $pictures[$num];
         }
   
-        // return phpthumb url
+        // return thumb url
         return $this->provider->thumb( $path, $width, $height, $resizeMode );
     }
 }
