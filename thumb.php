@@ -327,20 +327,23 @@ class InternalThumbProvider extends ThumbProvider {
         }
     
         // Checking if the client is validating his cache and if it is current.
-#  if( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
-#      strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])==filemtime($original) ) {
-#    // Client's cache IS current, so we just respond '304 Not Modified'.
-#    header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($original)).' GMT', true, 304);
-#  } else {
-#    // Image not cached or cache outdated, we respond '200 OK' and output the image.
-#    header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($original)).' GMT', true, 200);
+  $etag = md5( $original . filemtime($original) . filesize($original) );
+  header('ETag: '.$etag);
+  if( (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
+      strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])==filemtime($original)) ||
+      (isset($_SERVER['HTTP_IF_NONE_MATCH']) &&  $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) ) {
+    // Client's cache IS current, so we just respond '304 Not Modified'.
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($original)).' GMT', true, 304);
+  } else {
+    // Image not cached or cache outdated, we respond '200 OK' and output the image.
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($original)).' GMT', true, 200);
     header('Content-Length: '.filesize($filename));
     header("Content-type: " . WikiGalleryMimeType($original) );
     header("Pragma: ");
-    header("Expires: " . intval(time() + 3600) );
-    header("Cache-Control: max-age=3600, must-revalidate");
+    header('Expires: '.gmdate('D, j M Y H:i:s T', time() + 600));
+    header("Cache-Control: max-age=600, must-revalidate");
     print file_get_contents( $filename );
-#  }
+  }
     }
 }
 
